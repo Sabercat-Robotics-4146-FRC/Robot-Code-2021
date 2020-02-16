@@ -24,9 +24,9 @@ public class Constants {
     public static final double kDriveWheelTrackWidthInches = 25.42;
     public static final double kTrackScrubFactor = 1.0469745223;
 
-    // Joysticks
-    public static final int kThrottleStickPort = 0;
-    public static final int kTurnStickPort = 1;
+    // Xbox Controllers
+    public static final int kDriver1USBPort = 0;
+    public static final int kDriver2USBPort = 1;
     public static final double kJoystickThreshold = 0.2;
 
 

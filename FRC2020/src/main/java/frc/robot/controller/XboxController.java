@@ -1,4 +1,4 @@
-package frc.lib.controller;
+package frc.robot.controller;
 
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -25,11 +25,11 @@ public class XboxController {
         }
     }
 
-    XboxController(int port) {
+    public XboxController(int port) {
         mController = new Joystick(port);
     }
 
-    double getJoystick(Side side, Axis axis) {
+    public double getJoystick(Side side, Axis axis) {
         double deadband = Constants.kJoystickThreshold;
 
         boolean left = side == Side.LEFT;
@@ -38,15 +38,15 @@ public class XboxController {
         return handleDeadband((y ? -1 : 1) * mController.getRawAxis((left ? 0 : 4) + (y ? 1 : 0)), deadband);
     }
 
-    boolean getTrigger(Side side) {
+    public boolean getTrigger(Side side) {
         return mController.getRawAxis(side == Side.LEFT ? 2 : 3) > Constants.kJoystickThreshold;
     }
 
-    boolean getButton(Button button) {
+    public boolean getButton(Button button) {
         return mController.getRawButton(button.id);
     }
 
-    int getDPad() {
+    public int getDPad() {
         return mController.getPOV();
     }
 

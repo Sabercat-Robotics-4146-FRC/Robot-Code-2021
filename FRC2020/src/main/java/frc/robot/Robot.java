@@ -7,8 +7,12 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import frc.robot.controller.XboxController;
+import frc.robot.controller.XboxController.Axis;
+import frc.robot.controller.XboxController.Button;
+import frc.robot.controller.XboxController.Side;
+import frc.robot.Constants;
 import frc.robot.loops.Looper;
 import frc.robot.subsystems.Drive;
 
@@ -20,16 +24,14 @@ public class Robot extends TimedRobot {
 
 	private Drive mDrive;
 	
-	private Joystick mThrottleStick;
-	private Joystick mTurnStick;
+	private XboxController mDriver1XboxController;
 
 	@Override
 	public void robotInit() {
 		mDrive = Drive.getInstance();
 		mSubsystemManager.setSubsystems(mDrive);
 
-		mThrottleStick = new Joystick(Constants.kThrottleStickPort);
-		mTurnStick = new Joystick(Constants.kTurnStickPort);
+		mDriver1XboxController = new XboxController(Constants.kDriver1USBPort);
 
 		mSubsystemManager.registerEnabledLoops(mEnabledLooper);
 		mSubsystemManager.registerDisabledLoops(mDisabledLooper);
@@ -55,6 +57,6 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopPeriodic() {
-		mDrive.setCheesyishDrive(mThrottleStick.getRawAxis(1), -mTurnStick.getRawAxis(0), mTurnStick.getRawButton(1));
+		mDrive.setCheesyishDrive(mDriver1XboxController.getJoystick(Side.LEFT,Axis.Y), -mDriver1XboxController.getJoystick(Side.RIGHT, Axis.X), mDriver1XboxController.getButton(Button.A));
 	}
 }
