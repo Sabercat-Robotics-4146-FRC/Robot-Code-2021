@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import frc.lib.geometry.Twist2d;
 import frc.robot.Constants;
@@ -27,19 +27,21 @@ public class Drive extends Subsystem {
 
     private PeriodicIO mPeriodicIO = new PeriodicIO();
 
-    private final TalonSRX mRightMaster;
-    private final TalonSRX mRightSlave;
-    private final TalonSRX mLeftMaster;
-    private final TalonSRX mLeftSlave;
+    private final TalonFX mRightMaster;
+    private final TalonFX mRightSlave;
+    private final TalonFX mLeftMaster;
+    private final TalonFX mLeftSlave;
 
     private Drive() {
-        mRightMaster = new TalonSRX(Constants.kDriveRightMasterId);
-        mRightSlave = new TalonSRX(Constants.kDriveRightSlaveId);
+        mRightMaster = new TalonFX(Constants.kDriveRightMasterId);
+        mRightSlave = new TalonFX(Constants.kDriveRightSlaveId);
         mRightSlave.set(ControlMode.Follower, Constants.kDriveRightMasterId);
 
-        mLeftMaster = new TalonSRX(Constants.kDriveLeftMasterId);
-        mLeftSlave = new TalonSRX(Constants.kDriveLeftSlaveId);
+        mLeftMaster = new TalonFX(Constants.kDriveLeftMasterId);
+        mLeftSlave = new TalonFX(Constants.kDriveLeftSlaveId);
         mLeftSlave.set(ControlMode.Follower, Constants.kDriveLeftMasterId);
+        mLeftMaster.setInverted(true);
+        mLeftSlave.setInverted(true);
     }
 
     @Override
@@ -57,7 +59,7 @@ public class Drive extends Subsystem {
             wheel = 0.0;
         }
 
-        final double kWheelGain = 0.05;
+        final double kWheelGain = 0.07;
         final double kWheelNonlinearity = 0.05;
         final double denominator = Math.sin(Math.PI / 2.0 * kWheelNonlinearity);
         // Apply a sin function that's scaled to make it feel better.

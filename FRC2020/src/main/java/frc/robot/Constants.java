@@ -11,10 +11,10 @@ public class Constants {
     public static final int kPCMId = 0;
 
     // Drive
-    public static final int kDriveRightMasterId = 0;
-    public static final int kDriveRightSlaveId = 1;
-    public static final int kDriveLeftMasterId = 2;
-    public static final int kDriveLeftSlaveId = 3;
+    public static final int kDriveRightMasterId = 1;
+    public static final int kDriveRightSlaveId = 2;
+    public static final int kDriveLeftMasterId = 3;
+    public static final int kDriveLeftSlaveId = 4;
 
     public static final double kDriveWheelTrackWidthInches = 25.42;
     public static final double kTrackScrubFactor = 1.0469745223;
@@ -25,21 +25,13 @@ public class Constants {
 
 
     // Flywheel
-    public static final int kFlywheelMasterId = 4;
-    public static final int kFlywheelSlaveId = 5;
+    public static final int kFlywheelMasterId = 6;
+    public static final int kFlywheelSlaveId = 7;
     public static final double kFlywheelKp = 0.0;
     public static final double kFlywheelKi = 0.0;
     public static final double kFlywheelKd = 0.0;
     public static final double kFlywheelKf = 0.0;
     public static final double kFlywheelTicksPerRevolution = 0.0; // based on gear reduction between encoder and output shaft, and encoder ppr
 
-    // Gear Grabber
-    public static final int kMotorGearGrabberTalonId = 6;
-    public static final int kMotorGearGrabberSolenoidId = 1;
 
-    // Intake
-    public static final int kIntakeLeftTalonId = 7;
-    public static final int kIntakeRightTalonId = 8;
-    public static final int kIntakeCloseSolenoidId = 2;
-    public static final int kIntakeClampSolenoidId = 3;
 }
