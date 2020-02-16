@@ -1,5 +1,10 @@
 package frc.robot;
 
+import frc.robot.subsystems.Limelight.LimelightConstants;
+import frc.lib.geometry.Pose2d;
+import frc.lib.geometry.Rotation2d;
+import frc.lib.geometry.Translation2d;
+
 public class Constants {
     public static final double kLooperDt = 0.01;
 
@@ -22,6 +27,7 @@ public class Constants {
     // Joysticks
     public static final int kThrottleStickPort = 0;
     public static final int kTurnStickPort = 1;
+    public static final double kJoystickThreshold = 0.2;
 
 
     // Flywheel
@@ -33,5 +39,56 @@ public class Constants {
     public static final double kFlywheelKf = 0.0;
     public static final double kFlywheelTicksPerRevolution = 0.0; // based on gear reduction between encoder and output shaft, and encoder ppr
 
+
+    // limelight
+    public static final double kHorizontalFOV = 59.6; // degrees
+    public static final double kVerticalFOV = 49.7; // degrees
+    public static final double kVPW = 2.0 * Math.tan(Math.toRadians(kHorizontalFOV / 2.0));
+    public static final double kVPH = 2.0 * Math.tan(Math.toRadians(kVerticalFOV / 2.0));
+    public static final double kImageCaptureLatency = 11.0 / 1000.0; // seconds
+
+    public static final double kMaxTrackerDistance = 9.0;
+    public static final double kMaxGoalTrackAge = 2.5;
+    public static final double kMaxGoalTrackAgeNotTracking = 0.1;
+    public static final double kMaxGoalTrackSmoothingTime = 0.5;
+    public static final double kTrackStabilityWeight = 0.0;
+    public static final double kTrackAgeWeight = 10.0;
+    public static final double kTrackSwitchingWeight = 100.0;
+
+    public static final double kCameraFrameRate = 90.0;
+    public static final double kMinStability = 0.5;
+    public static final int kPortPipeline = 0;
+    public static final int kBallPipeline = 2;
+    public static final double kPortTargetHeight = 39.125;
+    public static final double kHatchTargetHeight = 31.5;
+
+    public static final double kTurretToArmOffset = -2.5;  // in
+    public static final double kWristToTremorsEnd = 15.75;  // in
+
+    // Top limelight
+    public static final LimelightConstants kTopLimelightConstants = new LimelightConstants();
+    static {
+        kTopLimelightConstants.kName = "Top Limelight";
+        kTopLimelightConstants.kTableName = "limelight-top";
+        kTopLimelightConstants.kHeight = 44.047;  // inches
+        kTopLimelightConstants.kTurretToLens = new Pose2d(new Translation2d(-7.685, 0.0), Rotation2d.fromDegrees(0.0));
+        kTopLimelightConstants.kHorizontalPlaneToLens = Rotation2d.fromDegrees(-24.0);
+    }
+
+    // Bottom limelight
+    public static final LimelightConstants kBottomLimelightConstants = new LimelightConstants();
+    static {
+        kBottomLimelightConstants.kName = "Bottom Limelight";
+        kBottomLimelightConstants.kTableName = "limelight-bottom";
+        kBottomLimelightConstants.kHeight = 7.221;  // inches
+        kBottomLimelightConstants.kTurretToLens = new Pose2d(new Translation2d(-1.293, 2.556), Rotation2d.fromDegrees(2.0));
+        kBottomLimelightConstants.kHorizontalPlaneToLens = Rotation2d.fromDegrees(47.5);
+    }
+
+    public static final double kMaxTopLimelightHeight = 16.0;
+
+    public static final double kGenerateTrajectoryTime = 0.5;
+    public static final double kUseNextTrajectoryTime = 0.75;
+    public static final Rotation2d kMaxDeviance = Rotation2d.fromDegrees(0); // max angle away from ball that robot can be and still pick it up
 
 }
