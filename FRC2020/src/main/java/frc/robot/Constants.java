@@ -27,6 +27,9 @@ public class Constants {
     // IndexerAndRoller
     public static final int kRollerMotorId = 5;
 
+    // Led Constants
+    public static final int kLedStrip = 9;
+
     // Xbox Controllers
     public static final int kDriver1USBPort = 0;
     public static final int kDriver2USBPort = 1;

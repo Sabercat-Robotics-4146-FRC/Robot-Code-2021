@@ -16,6 +16,7 @@ import frc.robot.Constants;
 import frc.robot.loops.Looper;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.IndexerAndRoller;
+import frc.robot.subsystems.LED;
 
 public class Robot extends TimedRobot {
 	Looper mEnabledLooper = new Looper();
@@ -25,6 +26,7 @@ public class Robot extends TimedRobot {
 
 	private Drive mDrive;
 	private IndexerAndRoller mIndexerAndRoller;
+	private LED mLED;
 	
 	private XboxController mDriver1XboxController;
 
@@ -32,6 +34,7 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 		mDrive = Drive.getInstance();
 		mIndexerAndRoller = IndexerAndRoller.getInstance();
+		mLED = LED.getInstance();
 		mSubsystemManager.setSubsystems(mDrive);
 		mSubsystemManager.setSubsystems(mIndexerAndRoller);
 
@@ -63,5 +66,6 @@ public class Robot extends TimedRobot {
 	public void teleopPeriodic() {
 		mDrive.setCheesyishDrive(-mDriver1XboxController.getJoystick(Side.LEFT,Axis.Y), mDriver1XboxController.getJoystick(Side.RIGHT, Axis.X), mDriver1XboxController.getButton(Button.RB));
 		mIndexerAndRoller.setIndexer(mDriver1XboxController.getButton(Button.Y));
+		mLED.setLedColor(mDriver1XboxController.getButton(Button.B), mDriver1XboxController.getButton(Button.A), mDriver1XboxController.getButton(Button.X));
 	}
 }
