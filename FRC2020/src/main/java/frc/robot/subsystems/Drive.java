@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import frc.lib.geometry.Twist2d;
 import frc.robot.Constants;
@@ -27,18 +27,18 @@ public class Drive extends Subsystem {
 
     private PeriodicIO mPeriodicIO = new PeriodicIO();
 
-    private final TalonFX mRightMaster;
-    private final TalonFX mRightSlave;
-    private final TalonFX mLeftMaster;
-    private final TalonFX mLeftSlave;
+    private final TalonSRX mRightMaster;
+    private final TalonSRX mRightSlave;
+    private final TalonSRX mLeftMaster;
+    private final TalonSRX mLeftSlave;
 
     private Drive() {
-        mRightMaster = new TalonFX(Constants.kDriveRightMasterId);
-        mRightSlave = new TalonFX(Constants.kDriveRightSlaveId);
+        mRightMaster = new TalonSRX(Constants.kDriveRightMasterId);
+        mRightSlave = new TalonSRX(Constants.kDriveRightSlaveId);
         mRightSlave.set(ControlMode.Follower, Constants.kDriveRightMasterId);
 
-        mLeftMaster = new TalonFX(Constants.kDriveLeftMasterId);
-        mLeftSlave = new TalonFX(Constants.kDriveLeftSlaveId);
+        mLeftMaster = new TalonSRX(Constants.kDriveLeftMasterId);
+        mLeftSlave = new TalonSRX(Constants.kDriveLeftSlaveId);
         mLeftSlave.set(ControlMode.Follower, Constants.kDriveLeftMasterId);
         mLeftMaster.setInverted(true);
         mLeftSlave.setInverted(true);
@@ -51,7 +51,7 @@ public class Drive extends Subsystem {
     }
 
     public synchronized void setCheesyishDrive(double throttle, double wheel, boolean quickTurn) {
-        if (Util.epsilonEquals(throttle, 0.0, 0.04)) {
+        if (Util.epsilonEquals(throttle, 0.0, 0.08)) {
             throttle = 0.0;
         }
 
@@ -70,7 +70,7 @@ public class Drive extends Subsystem {
         }
 
         wheel *= kWheelGain;
-        DriveSignal signal = Kinematics.inverseKinematics(new Twist2d(throttle, 0.0, wheel));
+        DriveSignal signal = Kinematics.inverseKinematics(new Twist2d(throttle, 0.0, -wheel));
         double scaling_factor = Math.max(1.0, Math.max(Math.abs(signal.getLeft()), Math.abs(signal.getRight())));
         setOpenLoop(new DriveSignal(signal.getLeft() / scaling_factor, signal.getRight() / scaling_factor));
     }

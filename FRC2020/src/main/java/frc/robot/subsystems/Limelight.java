@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import frc.robot.Constants;
 import frc.robot.RobotState;
 import frc.lib.geometry.Pose2d;
-import frc.lib.geometry.Rotation2d;
 import frc.lib.geometry.Translation2d;
 import frc.lib.util.Util;
 import frc.lib.vision.TargetInfo;
@@ -21,14 +20,13 @@ import java.util.List;
  */
 public class Limelight extends Subsystem {
     public final static int kDefaultPipeline = 0;
-    public final static int kSortTopPipeline = 1;
 
     public static class LimelightConstants {
         public String kName = "";
         public String kTableName = "";
         public double kHeight = 0.0;
         public Pose2d kTurretToLens = Pose2d.identity();
-        public Rotation2d kHorizontalPlaneToLens = Rotation2d.identity();
+        public double kHorizontalPlaneToLens = 0;
     }
 
     private NetworkTable mNetworkTable;
@@ -70,7 +68,7 @@ public class Limelight extends Subsystem {
         return mConstants.kHeight;
     }
 
-    public Rotation2d getHorizontalPlaneToLens() {
+    public double getHorizontalPlaneToLens() {
         return mConstants.kHorizontalPlaneToLens;
     }
 
@@ -101,6 +99,7 @@ public class Limelight extends Subsystem {
 
             mOutputsHaveChanged = false;
         }
+
     }
 
     @Override
@@ -115,6 +114,7 @@ public class Limelight extends Subsystem {
     public synchronized void outputTelemetry() {
         SmartDashboard.putBoolean(mConstants.kName + ": Has Target", mSeesTarget);
         SmartDashboard.putNumber(mConstants.kName + ": Pipeline Latency (ms)", mPeriodicIO.latency);
+        SmartDashboard.putNumber("xOffset", mPeriodicIO.xOffset);
     }
 
     public enum LedMode {
@@ -251,5 +251,22 @@ public class Limelight extends Subsystem {
 
     public double getLatency() {
         return mPeriodicIO.latency;
+    }
+
+    public double getXOffset() {
+        return mPeriodicIO.xOffset;
+    }
+
+    public double getYOffset() {
+        return mPeriodicIO.yOffset;
+    }
+    
+    public double getDistance() {
+        return (Constants.kTargetHeight - mConstants.kHeight)
+                / Math.tan(mConstants.kHorizontalPlaneToLens + Math.toRadians(mPeriodicIO.yOffset));
+    }
+
+    public boolean SeesTarget() {
+        return mSeesTarget;
     }
 }
