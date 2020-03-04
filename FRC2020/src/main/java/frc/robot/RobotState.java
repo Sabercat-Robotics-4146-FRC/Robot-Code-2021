@@ -185,15 +185,15 @@ public class RobotState {
         vision_target_high_.reset();
     }
 
-    private Translation2d getCameraToVisionTargetPose(TargetInfo target, boolean high, Limelight source) {
+    private Translation2d getCameraToVisionTargetPose(TargetInfo target, Limelight source) {
         // Compensate for camera pitch
-        Translation2d xz_plane_translation = new Translation2d(target.getX(), target.getZ()).rotateBy(source.getHorizontalPlaneToLens());
+        Translation2d xz_plane_translation = new Translation2d(target.getX(), target.getZ()).rotateBy(Rotation2d.fromRadians(source.getHorizontalPlaneToLens()));
         double x = xz_plane_translation.x();
         double y = target.getY();
         double z = xz_plane_translation.y();
 
         // find intersection with the goal
-        double differential_height = source.getLensHeight() - (high ? Constants.kPortTargetHeight : Constants.kHatchTargetHeight);
+        double differential_height = source.getLensHeight() - (Constants.kTargetHeight);
         if ((z < 0.0) == (differential_height > 0.0)) {
             double scaling = differential_height / -z;
             double distance = Math.hypot(x, y) * scaling;
@@ -226,8 +226,7 @@ public class RobotState {
         }
 
         for (TargetInfo target : observations) {
-            mCameraToVisionTargetPosesLow.add(getCameraToVisionTargetPose(target, false, source));
-            mCameraToVisionTargetPosesHigh.add(getCameraToVisionTargetPose(target, true, source));
+            mCameraToVisionTargetPosesLow.add(getCameraToVisionTargetPose(target, source));
         }
 
         updatePortGoalTracker(timestamp, mCameraToVisionTargetPosesLow, vision_target_low_, source);
