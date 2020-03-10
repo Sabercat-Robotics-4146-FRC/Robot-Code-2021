@@ -14,6 +14,7 @@ import frc.robot.controller.XboxController.Button;
 import frc.robot.controller.XboxController.Side;
 import frc.robot.Constants;
 import frc.robot.loops.Looper;
+import frc.robot.subsystems.AutoPaths;
 import frc.robot.subsystems.Drive;
 
 public class Robot extends TimedRobot {
@@ -25,6 +26,10 @@ public class Robot extends TimedRobot {
 	private Drive mDrive;
 	
 	private XboxController mDriver1XboxController;
+
+	public Robot() {
+		AutoPaths.calculateAll();
+	}
 
 	@Override
 	public void robotInit() {
@@ -41,18 +46,29 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 		mDisabledLooper.stop();
 		mEnabledLooper.start();
+
+		mDrive.setIsAuto(true);
+	}
+
+	@Override
+	public void autonomousPeriodic() {
+		// will be added later
 	}
 
 	@Override
 	public void disabledInit() {
 		mEnabledLooper.stop();
 		mDisabledLooper.start();
+
+		mDrive.setIsAuto(false);
 	}
 
 	@Override
 	public void teleopInit() {
 		mDisabledLooper.stop();
 		mEnabledLooper.start();
+
+		mDrive.setIsAuto(false);
 	}
 
 	@Override

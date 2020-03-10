@@ -16,13 +16,14 @@ public class Constants {
     public static final int kPCMId = 0;
 
     // Drive
-    public static final int kDriveRightMasterId = 1;
-    public static final int kDriveRightSlaveId = 2;
-    public static final int kDriveLeftMasterId = 3;
-    public static final int kDriveLeftSlaveId = 4;
+    public static final int kDriveRightLeaderId = 1;
+    public static final int kDriveRightFollowerId = 2;
+    public static final int kDriveLeftLeaderId = 3;
+    public static final int kDriveLeftFollowerId = 4;
 
     public static final double kDriveWheelTrackWidthInches = 25.42;
     public static final double kTrackScrubFactor = 1.0469745223;
+    public static final double kTalonUpdateTime = 0.1;
 
     // Xbox Controllers
     public static final int kDriver1USBPort = 0;
@@ -31,8 +32,8 @@ public class Constants {
 
 
     // Flywheel
-    public static final int kFlywheelMasterId = 6;
-    public static final int kFlywheelSlaveId = 7;
+    public static final int kFlywheelLeaderId = 6;
+    public static final int kFlywheelFollowerId = 7;
     public static final double kFlywheelKp = 0.0;
     public static final double kFlywheelKi = 0.0;
     public static final double kFlywheelKd = 0.0;
@@ -90,5 +91,38 @@ public class Constants {
     public static final double kGenerateTrajectoryTime = 0.5;
     public static final double kUseNextTrajectoryTime = 0.75;
     public static final Rotation2d kMaxDeviance = Rotation2d.fromDegrees(0); // max angle away from ball that robot can be and still pick it up
+
+    // PathPlanner 
+    public static final double kPathAlpha = 0.7;
+    public static final double kPathBeta = 0.3;
+    public static final double kPathTolerance = 0.0000001;
+
+    public static final double kVelocityAlpha = 0.1;
+    public static final double kVelocityBeta = 0.3;
+    public static final double kVelocityTolerance = 0.0000001;
+
+    public static final int kDriveTicksPerFoot = 15049;
+
+    public static final double kVelocityKp = 0.0; // 0.075
+    public static final double kVelocityKi = 0.0;
+    public static final double kVelocityKd = 0.0;
+    public static final double kVelocityKf = 0.2 * 1023 / 4000;
+    public static final double kVelocityKiz = 0.0;
+    
+    public static final double kTurningKp = 0.0; // 2.0
+    public static final double kTurningKi = 0.0;
+    public static final double kTurningKd = 0.0; // 2.0
+    public static final double kTurningKf = 0.2 * 1023 / 4000;
+    public static final double kTurningKiz = 0.0; // 10
+
+    public static final int kPIDPrimary = 0;
+    public static final int kPIDTurn = 1;
+
+    // Auto
+    public static final int k1stInputId = 8;
+    public static final int k2ndInputId = 9;
+    public static final int k3rdInputId = 10;
+
+    public static final int kPigeonId = 17;
 
 }

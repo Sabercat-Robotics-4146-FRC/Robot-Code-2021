@@ -1,16 +1,29 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.sensors.PigeonIMU;
 
 import frc.lib.geometry.Twist2d;
 import frc.robot.Constants;
 import frc.robot.Kinematics;
 import frc.lib.util.DriveSignal;
+import frc.lib.util.Timer;
 import frc.lib.util.Util;
 
 public class Drive extends Subsystem {
     private static Drive mInstance;
+
+    private Autonomous mAuto = Autonomous.getInstance();
+
+    private Timer timer = new Timer();
+
+    public boolean isAuto = false;
+
+    private int mAutoStep = 1;
+    private int mAutoCounter = 0;
+    private double mAutoAccumulator = 0.0;
 
     public static Drive getInstance() {
         if (mInstance == null) {
@@ -21,33 +34,48 @@ public class Drive extends Subsystem {
     }
 
     public static class PeriodicIO {
+        // inputs
+
+        // outputs
         public double right_demand;
         public double left_demand;
+        public double gyro_heading;
+
     }
 
     private PeriodicIO mPeriodicIO = new PeriodicIO();
 
-    private final TalonFX mRightMaster;
-    private final TalonFX mRightSlave;
-    private final TalonFX mLeftMaster;
-    private final TalonFX mLeftSlave;
+    private final TalonFX mRightLeader;
+    private final TalonFX mRightFollower;
+    private final TalonFX mLeftLeader;
+    private final TalonFX mLeftFollower;
+
+    private final PigeonIMU pidgey;
 
     private Drive() {
-        mRightMaster = new TalonFX(Constants.kDriveRightMasterId);
-        mRightSlave = new TalonFX(Constants.kDriveRightSlaveId);
-        mRightSlave.set(ControlMode.Follower, Constants.kDriveRightMasterId);
+        mRightLeader = new TalonFX(Constants.kDriveRightLeaderId);
+        mRightFollower = new TalonFX(Constants.kDriveRightFollowerId);
+        mRightFollower.set(ControlMode.Follower, Constants.kDriveRightLeaderId);
 
-        mLeftMaster = new TalonFX(Constants.kDriveLeftMasterId);
-        mLeftSlave = new TalonFX(Constants.kDriveLeftSlaveId);
-        mLeftSlave.set(ControlMode.Follower, Constants.kDriveLeftMasterId);
-        mLeftMaster.setInverted(true);
-        mLeftSlave.setInverted(true);
+        mLeftLeader = new TalonFX(Constants.kDriveLeftLeaderId);
+        mLeftFollower = new TalonFX(Constants.kDriveLeftFollowerId);
+        mLeftFollower.set(ControlMode.Follower, Constants.kDriveLeftLeaderId);
+
+        mLeftLeader.setInverted(true);
+        mLeftFollower.setInverted(true);
+
+        pidgey = new PigeonIMU(17);
     }
 
     @Override
-    public void writePeriodicOutputs() {
-        mRightMaster.set(ControlMode.PercentOutput, mPeriodicIO.right_demand);
-        mLeftMaster.set(ControlMode.PercentOutput, mPeriodicIO.left_demand);
+    public void writePeriodicOutputs() { 
+        if (isAuto) {
+            mRightLeader.set(ControlMode.Velocity, mPeriodicIO.right_demand, DemandType.AuxPID, mPeriodicIO.gyro_heading);
+            mLeftLeader.set(ControlMode.Velocity, mPeriodicIO.left_demand, DemandType.AuxPID, mPeriodicIO.gyro_heading);
+        } else {
+            mRightLeader.set(ControlMode.PercentOutput, mPeriodicIO.right_demand);
+            mLeftLeader.set(ControlMode.PercentOutput, mPeriodicIO.left_demand);
+        }
     }
 
     public synchronized void setCheesyishDrive(double throttle, double wheel, boolean quickTurn) {
@@ -75,15 +103,48 @@ public class Drive extends Subsystem {
         setOpenLoop(new DriveSignal(signal.getLeft() / scaling_factor, signal.getRight() / scaling_factor));
     }
 
+    public synchronized void setSaberishAuto() {
+        // need to find a good place to zero sensors
+        timer.update();
+        
+        mAuto.getAutoPath(mAutoStep);
+        if(mAutoCounter <= mAuto.getLeftVelocities().length) {
+
+            mAutoAccumulator += timer.getDT();
+            if(mAutoAccumulator >= mAuto.getLeftVelocities()[mAutoCounter][0]) {
+
+                setClosedLoop(new DriveSignal(mAuto.getLeftVelocities()[mAutoCounter][1], 
+                    mAuto.getRightVelocities()[mAutoCounter][1], true), 
+                    mAuto.getHeading()[mAutoCounter][1]);
+
+                mAutoCounter++;
+            }
+        } else {
+            mAutoCounter = 0;
+            // mAutoAccumulator = 0;
+            
+            // if(indexer empty) ? autostep++
+            
+        }
+    }
+
     public void setOpenLoop(DriveSignal signal) {
-        mPeriodicIO.right_demand = signal.getRight();;
+        mPeriodicIO.right_demand = signal.getRight();
         mPeriodicIO.left_demand = signal.getLeft();
+    }
+
+    public void setClosedLoop(DriveSignal signal, double head) {
+        // put motor configs here (pids and shit)
+
+        mPeriodicIO.right_demand = signal.getRight();
+        mPeriodicIO.left_demand = signal.getLeft();
+        mPeriodicIO.gyro_heading = head;
     }
 
     @Override
     public void stop() {
-        mRightMaster.set(ControlMode.PercentOutput, 0.0);
-        mLeftMaster.set(ControlMode.PercentOutput, 0.0);
+        mRightLeader.set(ControlMode.PercentOutput, 0.0);
+        mLeftLeader.set(ControlMode.PercentOutput, 0.0);
     }
 
     @Override
@@ -92,5 +153,21 @@ public class Drive extends Subsystem {
     }
 
     @Override
-    public void outputTelemetry() {}
+    public void outputTelemetry() {
+        // SmartDashboard.getString("Auto Running: ", mAutoName);
+
+    }
+
+    public synchronized void setIsAuto(boolean isAuto) {
+        this.isAuto = isAuto;
+    }
+
+    public void zeroSensors() {
+        // zero pidgey
+        pidgey.setYaw(0, 30);
+        pidgey.setAccumZAngle(0, 30);
+
+        mRightLeader.setSelectedSensorPosition(0, Constants.kPIDPrimary, 30);
+        mLeftLeader.setSelectedSensorPosition(0, Constants.kPIDPrimary, 30);
+    }
 }

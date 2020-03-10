@@ -22,7 +22,7 @@ public class Flywheel extends Subsystem {
         return mInstance;
     }
 
-    private final TalonSRX mMaster, mSlave;
+    private final TalonSRX mLeader, mFollower;
 
     public class PeriodicIO {
         // inputs
@@ -35,23 +35,23 @@ public class Flywheel extends Subsystem {
     private PeriodicIO mPeriodicIO = new PeriodicIO();
 
     private Flywheel() {
-        mMaster = TalonSRXFactory.createDefaultTalon(Constants.kFlywheelMasterId);
+        mLeader = TalonSRXFactory.createDefaultTalon(Constants.kFlywheelLeaderId);
 
         // initialize encoder
-        TalonSRXUtil.checkError(mMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0,
+        TalonSRXUtil.checkError(mLeader.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0,
                 Constants.kLongCANTimeoutMs), "Flywheel: Could not detect encoder: ");
 
         // set gains
-        TalonSRXUtil.checkError(mMaster.config_kP(0, Constants.kFlywheelKp, Constants.kLongCANTimeoutMs),
+        TalonSRXUtil.checkError(mLeader.config_kP(0, Constants.kFlywheelKp, Constants.kLongCANTimeoutMs),
             "Flywheel: could not set kP: ");
-        TalonSRXUtil.checkError(mMaster.config_kI(0, Constants.kFlywheelKi, Constants.kLongCANTimeoutMs),
+        TalonSRXUtil.checkError(mLeader.config_kI(0, Constants.kFlywheelKi, Constants.kLongCANTimeoutMs),
             "Flywheel: could not set kI: ");
-        TalonSRXUtil.checkError(mMaster.config_kD(0, Constants.kFlywheelKd, Constants.kLongCANTimeoutMs),
+        TalonSRXUtil.checkError(mLeader.config_kD(0, Constants.kFlywheelKd, Constants.kLongCANTimeoutMs),
             "Flywheel: could not set kD: ");
-        TalonSRXUtil.checkError(mMaster.config_kF(0, Constants.kFlywheelKf, Constants.kLongCANTimeoutMs),
+        TalonSRXUtil.checkError(mLeader.config_kF(0, Constants.kFlywheelKf, Constants.kLongCANTimeoutMs),
             "Flywheel: Could not set kF: ");
 
-        mSlave = TalonSRXFactory.createPermanentSlaveTalon(Constants.kFlywheelSlaveId, Constants.kFlywheelMasterId);
+        mFollower = TalonSRXFactory.createPermanentSlaveTalon(Constants.kFlywheelFollowerId, Constants.kFlywheelLeaderId);
     }
 
     @Override
@@ -72,17 +72,17 @@ public class Flywheel extends Subsystem {
 
     @Override
     public void readPeriodicInputs() {
-        mPeriodicIO.velocity_ticks_per_100_ms = mMaster.getSelectedSensorPosition(0);
+        mPeriodicIO.velocity_ticks_per_100_ms = mLeader.getSelectedSensorPosition(0);
     }
 
     @Override
     public void writePeriodicOutputs() {
-        mMaster.set(ControlMode.Velocity, mPeriodicIO.demand);
+        mLeader.set(ControlMode.Velocity, mPeriodicIO.demand);
     }
 
     @Override
     public void stop() {
-        mMaster.set(ControlMode.PercentOutput, 0.0);
+        mLeader.set(ControlMode.PercentOutput, 0.0);
     }
 
     @Override
