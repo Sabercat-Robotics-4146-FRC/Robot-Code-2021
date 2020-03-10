@@ -26,10 +26,10 @@ public class Constants {
 
     // IndexerAndRoller
     public static final int kRollerMotorId = 5;
-    public static final int kIndexerMotorId1 = 10;
-    public static final int kIndexerMotorId2 = 11;
-    public static final int kIndexerMotorId3 = 12;
-    public static final int kIndexerMotorId4 = 13;
+    public static final int kIndexerMotorId1 = 11;
+    public static final int kIndexerMotorId2 = 12;
+    public static final int kIndexerMotorId3 = 13;
+    public static final int kIndexerMotorId4 = 14;
 
     // Xbox Controllers
     public static final int kDriver1USBPort = 0;
