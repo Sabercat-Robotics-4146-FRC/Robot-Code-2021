@@ -40,7 +40,7 @@ public class IndexerAndRoller extends Subsystem {
         mIndexerMotors[2] = mIndexerMotor3;
         mIndexerMotors[3] = mIndexerMotor4;
         for (int i = 0; i < mIRSensors.length; i++) {
-            mIRSensors[i] = new DigitalInput(i);
+            mIRSensors[i] = new DigitalInput(i+2);
         }
 
         // Roller
