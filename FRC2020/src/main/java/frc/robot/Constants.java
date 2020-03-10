@@ -4,6 +4,8 @@ import frc.robot.subsystems.Limelight.LimelightConstants;
 import frc.lib.geometry.Pose2d;
 import frc.lib.geometry.Rotation2d;
 import frc.lib.geometry.Translation2d;
+import com.revrobotics.ColorMatch;
+import edu.wpi.first.wpilibj.util.Color;
 
 public class Constants {
     public static final double kLooperDt = 0.01;
@@ -39,6 +41,12 @@ public class Constants {
     public static final double kFlywheelKf = 0.0;
     public static final double kFlywheelTicksPerRevolution = 0.0; // based on gear reduction between encoder and output shaft, and encoder ppr
 
+    // Control Panel
+    public static final int kControlPanelMotorId = 5;
+    public static final Color kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
+    public static final Color kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
+    public static final Color kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
+    public static final Color kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
 
     // limelight
     public static final double kHorizontalFOV = 59.6; // degrees
