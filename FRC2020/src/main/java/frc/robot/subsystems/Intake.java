@@ -1,7 +1,8 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 import frc.robot.Constants;
@@ -17,14 +18,14 @@ public class Intake extends Subsystem {
         return mInstance;
     }
 
-    private final TalonSRX roller;
-    private final TalonSRX armPivot;
+    private final CANSparkMax roller;
+    private final CANSparkMax armPivot;
     private final DigitalInput bottomLimitSwitch;
     private final DigitalInput topLimitSwitch;
 
     private Intake() {
-        roller = new TalonSRX(Constants.kRollerId);
-        armPivot = new TalonSRX(Constants.kArmPivotId);
+        roller = new CANSparkMax(Constants.kRollerId, MotorType.kBrushless);
+        armPivot = new CANSparkMax(Constants.kArmPivotId, MotorType.kBrushless);
         bottomLimitSwitch = new DigitalInput(Constants.kIntakeBottomLimitSwitchId);
         topLimitSwitch = new DigitalInput(Constants.kIntakeTopLimitSwitchId);
     }
@@ -63,14 +64,14 @@ private PeriodicIO mPeriodicIO = new PeriodicIO();
 
     @Override
     public void writePeriodicOutputs() {
-      roller.set(ControlMode.PercentOutput, mPeriodicIO.intakeDemand);
-      armPivot.set(ControlMode.PercentOutput, mPeriodicIO.armPivotDemand);
+      roller.set(mPeriodicIO.intakeDemand);
+      armPivot.set(mPeriodicIO.armPivotDemand);
     }
 
     @Override
     public void stop() {
-        roller.set(ControlMode.PercentOutput, 0.0);
-        armPivot.set(ControlMode.PercentOutput, 0.0);
+        roller.set(0.0);
+        armPivot.set(0.0);
     }
 
     @Override
