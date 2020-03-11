@@ -56,8 +56,13 @@ public class IndexerAndRoller extends Subsystem {
         for (int i = 1; i < mIRSensors.length - 1; i ++) {
             // When there is a ball below a unfilled spot, move it up 1 spot
             if (mIRSensors[i].get() == false && mIRSensors[i-1].get() == true) {
-                mIndexerMotors[i].set(-0.2);
-                mIndexerMotors[i-1].set(-0.2);
+                if (i == 4) {
+                    mIndexerMotors[3].set(-0.2);
+                    
+                } else {
+                    mIndexerMotors[i].set(-0.2);
+                    mIndexerMotors[i-1].set(-0.2);
+                }
             }
             // Dont turn on motors when spot above has ball, or there is no ball in spot
             else {
