@@ -7,14 +7,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
-import frc.robot.controller.XboxController;
-import frc.robot.controller.XboxController.Axis;
-import frc.robot.controller.XboxController.Button;
-import frc.robot.controller.XboxController.Side;
-import frc.robot.Constants;
 import frc.robot.loops.Looper;
-import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.*;
 
 public class Robot extends TimedRobot {
 	Looper mEnabledLooper = new Looper();
@@ -23,15 +19,37 @@ public class Robot extends TimedRobot {
 	private final SubsystemManager mSubsystemManager = SubsystemManager.getInstance();
 
 	private Drive mDrive;
-	
-	private XboxController mDriver1XboxController;
+
+	private Joystick mController;
+
+	public TurretAndFlywheel mTurretAndFlywheel;
+  	public Intake mIntake;
+	public Pneumatics mPneumatics;
+
+	private boolean AButtonFlag = false;
+	public boolean BButtonFlag = false;
+	public boolean RBButtonFlag = false;
+	public boolean XButtonFlag = false;
+
+	public boolean intakeToggle = false;
+  	public boolean pneumaticsToggle = false;
+	public boolean flywheelToggle = false;
+	public boolean limelightToggle = false;
+
+
+
+
 
 	@Override
 	public void robotInit() {
 		mDrive = Drive.getInstance();
-		mSubsystemManager.setSubsystems(mDrive);
+		mIntake = Intake.getInstance();
+		mTurretAndFlywheel = TurretAndFlywheel.getInstance();
+		mPneumatics = Pneumatics.getInstance();
 
-		mDriver1XboxController = new XboxController(Constants.kDriver1USBPort);
+		mSubsystemManager.setSubsystems(new Subsystem[] {mDrive, mIntake, mTurretAndFlywheel, mPneumatics});
+
+		mController = new Joystick(Constants.kDriver1USBPort);
 
 		mSubsystemManager.registerEnabledLoops(mEnabledLooper);
 		mSubsystemManager.registerDisabledLoops(mDisabledLooper);
@@ -57,6 +75,44 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopPeriodic() {
-		mDrive.setCheesyishDrive(-mDriver1XboxController.getJoystick(Side.LEFT,Axis.Y), mDriver1XboxController.getJoystick(Side.RIGHT, Axis.X), mDriver1XboxController.getButton(Button.A));
+		//mDrive.setCheesyishDrive(mThrottleStick.getRawAxis(1), -mTurnStick.getRawAxis(0), mTurnStick.getRawButton(1));
+		mDrive.setCheesyishDrive(mController.getRawAxis(1), -mController.getRawAxis(4), mController.getRawButton(4));
+
+		if (mController.getRawButtonPressed(3) && !XButtonFlag) {
+			XButtonFlag = true;
+			limelightToggle = !limelightToggle;
+		}
+
+		if(!mController.getRawButtonPressed(3)) {
+			XButtonFlag = false;
+		}
+
+		mTurretAndFlywheel.turretTurning(mController.getRawAxis(2) - mController.getRawAxis(3), limelightToggle);
+		mTurretAndFlywheel.flywheel(limelightToggle);
+
+		if (mController.getRawButtonPressed(1) && !AButtonFlag) {
+			AButtonFlag = true;
+			intakeToggle = !intakeToggle;
+		}
+
+		if(!mController.getRawButtonPressed(1)) {
+			AButtonFlag = false;
+		}
+
+		mIntake.intakeToggle(intakeToggle);
+
+
+		if (mController.getRawButtonPressed(2) && !BButtonFlag) {
+			BButtonFlag = true;
+			pneumaticsToggle = !pneumaticsToggle;
+		}
+
+		if(!mController.getRawButtonPressed(2)) {
+			BButtonFlag = false;
+		}
+
+
+		mPneumatics.solenoid(pneumaticsToggle);
 	}
+
 }
