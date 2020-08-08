@@ -1,9 +1,9 @@
 package frc.robot;
 
-import frc.robot.subsystems.Limelight.LimelightConstants;
 import frc.lib.geometry.Pose2d;
 import frc.lib.geometry.Rotation2d;
 import frc.lib.geometry.Translation2d;
+import frc.robot.subsystems.Limelight.LimelightConstants;
 
 public class Constants {
   public static final double kLooperDt = 0.01;
@@ -81,11 +81,13 @@ public class Constants {
 
   // Top limelight
   public static final LimelightConstants kLimelightConstants = new LimelightConstants();
+
   static {
     kLimelightConstants.kName = "limelight";
     kLimelightConstants.kTableName = "limelight";
     kLimelightConstants.kHeight = 54.5; // inches
-    kLimelightConstants.kTurretToLens = new Pose2d(new Translation2d(-7.685, 0.0), Rotation2d.fromDegrees(0.0));
+    kLimelightConstants.kTurretToLens =
+        new Pose2d(new Translation2d(-7.685, 0.0), Rotation2d.fromDegrees(0.0));
     kLimelightConstants.kHorizontalPlaneToLens = Math.toRadians(-3.9);
   }
 
@@ -93,7 +95,8 @@ public class Constants {
 
   public static final double kGenerateTrajectoryTime = 0.5;
   public static final double kUseNextTrajectoryTime = 0.75;
-  public static final Rotation2d kMaxDeviance = Rotation2d.fromDegrees(0); // max angle away from ball that robot can be
-                                                                           // and still pick it up
+  public static final Rotation2d kMaxDeviance =
+      Rotation2d.fromDegrees(0); // max angle away from ball that robot can be
+  // and still pick it up
 
 }

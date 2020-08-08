@@ -13,107 +13,104 @@ import frc.robot.loops.Looper;
 import frc.robot.subsystems.*;
 
 public class Robot extends TimedRobot {
-	Looper mEnabledLooper = new Looper();
-	Looper mDisabledLooper = new Looper();
+  Looper mEnabledLooper = new Looper();
+  Looper mDisabledLooper = new Looper();
 
-	private final SubsystemManager mSubsystemManager = SubsystemManager.getInstance();
+  private final SubsystemManager mSubsystemManager = SubsystemManager.getInstance();
 
-	private Drive mDrive;
+  private Drive mDrive;
 
-	private Joystick mController;
+  private Joystick mController;
 
-	public TurretAndFlywheel mTurretAndFlywheel;
-  	public Intake mIntake;
-	public Pneumatics mPneumatics;
+  public TurretAndFlywheel mTurretAndFlywheel;
+  public Intake mIntake;
+  public Pneumatics mPneumatics;
 
-	private boolean AButtonFlag = false;
-	public boolean BButtonFlag = false;
-	public boolean RBButtonFlag = false;
-	public boolean XButtonFlag = false;
+  private boolean AButtonFlag = false;
+  public boolean BButtonFlag = false;
+  public boolean RBButtonFlag = false;
+  public boolean XButtonFlag = false;
 
-	public boolean intakeToggle = false;
-  	public boolean pneumaticsToggle = false;
-	public boolean flywheelToggle = false;
-	public boolean limelightToggle = false;
+  public boolean intakeToggle = false;
+  public boolean pneumaticsToggle = false;
+  public boolean flywheelToggle = false;
+  public boolean limelightToggle = false;
 
+  @Override
+  public void robotInit() {
+    mDrive = Drive.getInstance();
+    mIntake = Intake.getInstance();
+    mTurretAndFlywheel = TurretAndFlywheel.getInstance();
+    mPneumatics = Pneumatics.getInstance();
 
+    mSubsystemManager.setSubsystems(
+        new Subsystem[] {mDrive, mIntake, mTurretAndFlywheel, mPneumatics});
 
+    mController = new Joystick(Constants.kDriver1USBPort);
 
+    mSubsystemManager.registerEnabledLoops(mEnabledLooper);
+    mSubsystemManager.registerDisabledLoops(mDisabledLooper);
+  }
 
-	@Override
-	public void robotInit() {
-		mDrive = Drive.getInstance();
-		mIntake = Intake.getInstance();
-		mTurretAndFlywheel = TurretAndFlywheel.getInstance();
-		mPneumatics = Pneumatics.getInstance();
+  @Override
+  public void autonomousInit() {
+    mDisabledLooper.stop();
+    mEnabledLooper.start();
+  }
 
-		mSubsystemManager.setSubsystems(new Subsystem[] {mDrive, mIntake, mTurretAndFlywheel, mPneumatics});
+  @Override
+  public void disabledInit() {
+    mEnabledLooper.stop();
+    mDisabledLooper.start();
+  }
 
-		mController = new Joystick(Constants.kDriver1USBPort);
+  @Override
+  public void teleopInit() {
+    mDisabledLooper.stop();
+    mEnabledLooper.start();
+  }
 
-		mSubsystemManager.registerEnabledLoops(mEnabledLooper);
-		mSubsystemManager.registerDisabledLoops(mDisabledLooper);
-	}
+  @Override
+  public void teleopPeriodic() {
+    // mDrive.setCheesyishDrive(mThrottleStick.getRawAxis(1), -mTurnStick.getRawAxis(0),
+    // mTurnStick.getRawButton(1));
+    mDrive.setCheesyishDrive(
+        mController.getRawAxis(1), -mController.getRawAxis(4), mController.getRawButton(4));
 
-	@Override
-	public void autonomousInit() {
-		mDisabledLooper.stop();
-		mEnabledLooper.start();
-	}
+    if (mController.getRawButtonPressed(3) && !XButtonFlag) {
+      XButtonFlag = true;
+      limelightToggle = !limelightToggle;
+    }
 
-	@Override
-	public void disabledInit() {
-		mEnabledLooper.stop();
-		mDisabledLooper.start();
-	}
+    if (!mController.getRawButtonPressed(3)) {
+      XButtonFlag = false;
+    }
 
-	@Override
-	public void teleopInit() {
-		mDisabledLooper.stop();
-		mEnabledLooper.start();
-	}
+    mTurretAndFlywheel.turretTurning(
+        mController.getRawAxis(2) - mController.getRawAxis(3), limelightToggle);
+    mTurretAndFlywheel.flywheel(4800, limelightToggle);
+    mTurretAndFlywheel.hood(.6);
 
-	@Override
-	public void teleopPeriodic() {
-		//mDrive.setCheesyishDrive(mThrottleStick.getRawAxis(1), -mTurnStick.getRawAxis(0), mTurnStick.getRawButton(1));
-		mDrive.setCheesyishDrive(mController.getRawAxis(1), -mController.getRawAxis(4), mController.getRawButton(4));
+    if (mController.getRawButtonPressed(1) && !AButtonFlag) {
+      AButtonFlag = true;
+      intakeToggle = !intakeToggle;
+    }
 
-		if (mController.getRawButtonPressed(3) && !XButtonFlag) {
-			XButtonFlag = true;
-			limelightToggle = !limelightToggle;
-		}
+    if (!mController.getRawButtonPressed(1)) {
+      AButtonFlag = false;
+    }
 
-		if(!mController.getRawButtonPressed(3)) {
-			XButtonFlag = false;
-		}
+    mIntake.intakeToggle(intakeToggle);
 
-		mTurretAndFlywheel.turretTurning(mController.getRawAxis(2) - mController.getRawAxis(3), limelightToggle);
-		mTurretAndFlywheel.flywheel(4800, limelightToggle);
-		mTurretAndFlywheel.hood(.6);
+    if (mController.getRawButtonPressed(2) && !BButtonFlag) {
+      BButtonFlag = true;
+      pneumaticsToggle = !pneumaticsToggle;
+    }
 
-		if (mController.getRawButtonPressed(1) && !AButtonFlag) {
-			AButtonFlag = true;
-			intakeToggle = !intakeToggle;
-		}
+    if (!mController.getRawButtonPressed(2)) {
+      BButtonFlag = false;
+    }
 
-		if(!mController.getRawButtonPressed(1)) {
-			AButtonFlag = false;
-		}
-
-		mIntake.intakeToggle(intakeToggle);
-
-
-		if (mController.getRawButtonPressed(2) && !BButtonFlag) {
-			BButtonFlag = true;
-			pneumaticsToggle = !pneumaticsToggle;
-		}
-
-		if(!mController.getRawButtonPressed(2)) {
-			BButtonFlag = false;
-		}
-
-
-		mPneumatics.solenoid(pneumaticsToggle);
-	}
-
+    mPneumatics.solenoid(pneumaticsToggle);
+  }
 }

@@ -1,8 +1,10 @@
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2020.2.2"
-    id "com.diffplug.gradle.spotless" version "3.24.2"
+    id "edu.wpi.first.GradleRIO" version "2020.3.2"
+    id "com.diffplug.spotless" version "5.1.1" apply false
 }
+
+apply from: file("formatting.gradle")
 
 sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
@@ -66,12 +68,4 @@ dependencies {
 jar {
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
-}
-spotless {
-  java {
-    googleJavaFormat('1.1').aosp()
-    paddedCell()
-    // importOrderFile 'config\\spotless\\importorder'				// An import ordering file, exported from Eclipse
-    // removeUnusedImports() // removes any unused imports
-  }
 }

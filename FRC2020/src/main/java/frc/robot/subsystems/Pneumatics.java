@@ -1,60 +1,58 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import frc.robot.Constants;
 
 public class Pneumatics extends Subsystem {
-    private static Pneumatics mInstance;
+  private static Pneumatics mInstance;
 
-    public static Pneumatics getInstance() {
-        if (mInstance == null) {
-            mInstance = new Pneumatics();
-        }
-
-        return mInstance;
+  public static Pneumatics getInstance() {
+    if (mInstance == null) {
+      mInstance = new Pneumatics();
     }
 
-    private final Compressor compressor;
-    private final Solenoid solenoid;
+    return mInstance;
+  }
 
-    private Pneumatics() {
-        compressor = new Compressor(Constants.kPCMId);
-        solenoid = new Solenoid(Constants.kSolenoidId);
-    }
+  private final Compressor compressor;
+  private final Solenoid solenoid;
 
-    public static class PeriodicIO {
-      public boolean solenoidDemand;
-    }
+  private Pneumatics() {
+    compressor = new Compressor(Constants.kPCMId);
+    solenoid = new Solenoid(Constants.kSolenoidId);
+  }
 
-    private PeriodicIO mPeriodicIO = new PeriodicIO();
+  public static class PeriodicIO {
+    public boolean solenoidDemand;
+  }
 
-    public void solenoid(boolean input) {
+  private PeriodicIO mPeriodicIO = new PeriodicIO();
 
-        mPeriodicIO.solenoidDemand = input;
+  public void solenoid(boolean input) {
 
-        SmartDashboard.putBoolean("solenoid input", input);
-    }
+    mPeriodicIO.solenoidDemand = input;
 
-    @Override
-    public void writePeriodicOutputs() {
-        compressor.setClosedLoopControl(true);
-        solenoid.set(mPeriodicIO.solenoidDemand);
-    }
+    SmartDashboard.putBoolean("solenoid input", input);
+  }
 
-    @Override
-    public void stop() {
-        solenoid.set(false);
-    }
+  @Override
+  public void writePeriodicOutputs() {
+    compressor.setClosedLoopControl(true);
+    solenoid.set(mPeriodicIO.solenoidDemand);
+  }
 
-    @Override
-    public boolean checkSystem() {
-        return true;
-    }
+  @Override
+  public void stop() {
+    solenoid.set(false);
+  }
 
-    @Override
-    public void outputTelemetry() {}
+  @Override
+  public boolean checkSystem() {
+    return true;
+  }
 
+  @Override
+  public void outputTelemetry() {}
 }
