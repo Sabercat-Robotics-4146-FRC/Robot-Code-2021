@@ -23,19 +23,40 @@ public class LED extends Subsystem {
         mLedBuffer = new AddressableLEDBuffer(7);
     }
 
-    public synchronized void setLedColor(boolean red, boolean green, boolean blue) {
+    public synchronized void setLedColor(boolean red, boolean green, boolean blue, boolean yellow, boolean off) {
         mLedStrip.setLength(mLedBuffer.getLength());
         mLedStrip.setData(mLedBuffer);
         mLedStrip.start();
         for (int i = 0; i < mLedBuffer.getLength(); i++){
             if (red) {
                 mLedBuffer.setRGB(i, 255, 0, 0); 
+                mLedStrip.stop();
+            } else {
+                mLedStrip.stop();
             }
             if (green) {
                 mLedBuffer.setRGB(i, 0, 255, 0);
+                mLedStrip.stop();
+            } else {
+                mLedStrip.stop();
             }
             if (blue) {
                 mLedBuffer.setRGB(i, 0, 0, 255);
+                mLedStrip.stop();
+            } else {
+                mLedStrip.stop();
+            }
+            if (yellow) {
+                mLedBuffer.setRGB(i, 255, 200, 0);
+                mLedStrip.stop();
+            } else {
+                mLedStrip.stop();
+            }
+            if (off) {
+                mLedBuffer.setRGB(i, 0, 0, 0);
+                mLedStrip.stop();
+            } else {
+                mLedStrip.stop();
             }
         }
         mLedStrip.setData(mLedBuffer);
