@@ -26,10 +26,10 @@ public class Constants {
 
     // IndexerAndRoller
     public static final int kRollerMotorId = 5;
-    public static final int kIndexerMotorId1 = 11;
-    public static final int kIndexerMotorId2 = 12;
-    public static final int kIndexerMotorId3 = 13;
-    public static final int kIndexerMotorId4 = 14;
+    public static final int kIndexerMotorId1 = 14;
+    public static final int kIndexerMotorId2 = 13;
+    public static final int kIndexerMotorId3 = 12;
+    public static final int kIndexerMotorId4 = 11;
 
     // Xbox Controllers
     public static final int kDriver1USBPort = 0;
@@ -38,8 +38,9 @@ public class Constants {
 
 
     // Flywheel
-    public static final int kFlywheelMasterId = 6;
-    public static final int kFlywheelSlaveId = 7;
+    public static final int kFlywheelMasterId = 7;
+    public static final int kFlywheelSlaveId = 8;
+    public static final int kTurretLeftRightId = 9;
     public static final double kFlywheelKp = 0.0;
     public static final double kFlywheelKi = 0.0;
     public static final double kFlywheelKd = 0.0;

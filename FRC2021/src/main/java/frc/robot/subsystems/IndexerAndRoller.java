@@ -1,9 +1,9 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 public class IndexerAndRoller extends Subsystem {
     public static IndexerAndRoller mInstance;
@@ -16,79 +16,77 @@ public class IndexerAndRoller extends Subsystem {
         return mInstance;
     }
 
-    // Indexer Middle
-    private final DigitalInput mIRSensors[];
-    private final CANSparkMax mIndexerMotors[];
-    private final CANSparkMax mIndexerMotor1;
-    private final CANSparkMax mIndexerMotor2;
-    private final CANSparkMax mIndexerMotor3;
-    private final CANSparkMax mIndexerMotor4;
+    // Sensors
+    private final DigitalInput mIRSensor1;
+    private final DigitalInput mIRSensor2;
+    private final DigitalInput mIRSensor3;
 
-    // Roller
-    // private final CANSparkMax mRollerMotor;
+    // Indexer Motors
+    private final CANSparkMax mSparkMaxID14;
+    private final CANSparkMax mSparkMaxID13;
+    private final CANSparkMax mSparkMaxID12;
+    private final CANSparkMax mSparkMaxID11;
+
+    // Turret Motors
+    private final CANSparkMax mSparkMaxID7;
+    private final CANSparkMax mSparkMaxID8;
 
     private IndexerAndRoller() {
-        // Indexer Middle
-        mIRSensors = new DigitalInput[5];
-        mIndexerMotor1 = new CANSparkMax(Constants.kIndexerMotorId1, MotorType.kBrushless);
-        mIndexerMotor2 = new CANSparkMax(Constants.kIndexerMotorId2, MotorType.kBrushless);
-        mIndexerMotor3 = new CANSparkMax(Constants.kIndexerMotorId3, MotorType.kBrushless);
-        mIndexerMotor4 = new CANSparkMax(Constants.kIndexerMotorId4, MotorType.kBrushless);
-        mIndexerMotors = new CANSparkMax[4];
-        // mIndexerMotors[0] = mIndexerMotor1;
-        mIndexerMotors[0] = mIndexerMotor1;
-        mIndexerMotors[1] = mIndexerMotor2;
-        mIndexerMotors[2] = mIndexerMotor3;
-        mIndexerMotors[3] = mIndexerMotor4;
-        for (int i = 0; i < mIRSensors.length; i++) {
-            mIRSensors[i] = new DigitalInput(i+2);
-        }
+        mIRSensor1 = new DigitalInput(1);
+        mIRSensor2 = new DigitalInput(2);
+        mIRSensor3 = new DigitalInput(3);
 
-        // Roller
-        // mRollerMotor = new CANSparkMax(Constants.kRollerMotorId, MotorType.kBrushless);
+        mSparkMaxID14 = new CANSparkMax(Constants.kIndexerMotorId1, MotorType.kBrushless);
+        mSparkMaxID13 = new CANSparkMax(Constants.kIndexerMotorId2, MotorType.kBrushless);
+        mSparkMaxID12 = new CANSparkMax(Constants.kIndexerMotorId3, MotorType.kBrushless);
+        mSparkMaxID11 = new CANSparkMax(Constants.kIndexerMotorId4, MotorType.kBrushless);
+
+        mSparkMaxID7 = new CANSparkMax(Constants.kFlywheelMasterId, MotorType.kBrushless);
+        mSparkMaxID8 = new CANSparkMax(Constants.kFlywheelSlaveId, MotorType.kBrushless);
     }
 
-    public synchronized void setIndexer(boolean rollerDownAndOn) {
-        // Flywheel Insert
-
-
-        // Indexer Middle
-        for (int i = 1; i < mIRSensors.length - 1; i ++) {
-            // When there is a ball below a unfilled spot, move it up 1 spot
-            if (mIRSensors[i].get() == false && mIRSensors[i-1].get() == true) {
-                if (i == 4) {
-                    mIndexerMotors[3].set(-0.2);
-                    
-                } else {
-                    mIndexerMotors[i].set(-0.2);
-                    mIndexerMotors[i-1].set(-0.2);
-                }
-            }
-            // Dont turn on motors when spot above has ball, or there is no ball in spot
-            else {
-                mIndexerMotors[i].stopMotor();
-            }
+    public synchronized void setIndexer(boolean shootBall, boolean stopIntake) {
+        if (mIRSensor3.get() == true) {
+            mSparkMaxID12.set(-.1);
+            mSparkMaxID13.set(-.1);
+            mSparkMaxID14.set(-.1);
         }
 
-        // Roller
-
-        // // When 'Y' is pressed and there is no ball in the bottom slot, turn the roller motor on to 20%
-        // if (rollerDownAndOn && mIRSensors[5].get() == true) {
-        //     mRollerMotor.set(20);
-        // }
-        // // When 'Y' is pressed but there is a ball in the bottom slot, dont turn the roller motor on
-        // else if (rollerDownAndOn && mIRSensors[5].get() == false) {
-        //     mRollerMotor.stopMotor();
-        // }
-    }
-
-    public boolean isIndexerFinished() {
-        for (DigitalInput digitalInput : mIRSensors) {
-            if (digitalInput.get() == false) {
-                return false;
-            }   
+        if (mIRSensor3.get() == false && mIRSensor2.get() == true) {
+            mSparkMaxID12.set(0);
+            mSparkMaxID13.set(-.1);
+            mSparkMaxID14.set(-.1);
         }
-        return true;
+
+        if (mIRSensor3.get() == false && mIRSensor2.get() == false && mIRSensor1.get() == true) {
+            mSparkMaxID12.set(0);
+            mSparkMaxID13.set(0);
+            mSparkMaxID14.set(-.1);
+        }
+
+        if (mIRSensor3.get() == false && mIRSensor2.get() == false && mIRSensor1.get() == false) {
+            mSparkMaxID12.set(0);
+            mSparkMaxID13.set(0);
+            mSparkMaxID14.set(0);
+        }
+
+        if (shootBall == true) {
+            mSparkMaxID14.stopMotor();
+            mSparkMaxID13.stopMotor();
+            mSparkMaxID12.set(-.3);
+            mSparkMaxID11.set(.5);
+            mSparkMaxID8.set(-.2);
+            mSparkMaxID7.set(.2);
+        }
+
+        if (stopIntake == true) {
+            mSparkMaxID14.stopMotor();
+            mSparkMaxID13.stopMotor();
+            mSparkMaxID12.stopMotor();
+            mSparkMaxID11.stopMotor();
+            mSparkMaxID8.stopMotor();
+            mSparkMaxID7.stopMotor();
+        }
     }
 
     @Override
