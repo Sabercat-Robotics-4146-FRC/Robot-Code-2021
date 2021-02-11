@@ -88,7 +88,7 @@ public class Robot extends TimedRobot {
 
     mTurretAndFlywheel.turretTurning(
         mController.getRawAxis(2) - mController.getRawAxis(3), limelightToggle);
-    mTurretAndFlywheel.flywheel(4800, limelightToggle);
+    mTurretAndFlywheel.flywheel(0, limelightToggle);
     mTurretAndFlywheel.hood(.6);
 
     if (mController.getRawButtonPressed(1) && !AButtonFlag) {

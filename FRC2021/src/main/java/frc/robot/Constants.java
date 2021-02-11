@@ -74,7 +74,7 @@ public class Constants {
   public static final double kMinStability = 0.5;
   public static final int kPortPipeline = 0;
   public static final int kBallPipeline = 2;
-  public static final double kTargetHeight = 11.5;
+  public static final double kTargetHeight = 98.25;
 
   public static final double kTurretToArmOffset = -2.5; // in
   public static final double kWristToTremorsEnd = 15.75; // in
@@ -85,10 +85,10 @@ public class Constants {
   static {
     kLimelightConstants.kName = "limelight";
     kLimelightConstants.kTableName = "limelight";
-    kLimelightConstants.kHeight = 54.5; // inches
+    kLimelightConstants.kHeight = 37.9; // inches
     kLimelightConstants.kTurretToLens =
         new Pose2d(new Translation2d(-7.685, 0.0), Rotation2d.fromDegrees(0.0));
-    kLimelightConstants.kHorizontalPlaneToLens = Math.toRadians(-3.9);
+    kLimelightConstants.kHorizontalPlaneToLens = Math.toRadians(19);
   }
 
   public static final double kMaxTopLimelightHeight = 16.0;

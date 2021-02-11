@@ -46,10 +46,11 @@ public class TurretAndFlywheel extends Subsystem {
     // flywheelLeft
     flywheelLeft = new CANSparkMax(Constants.kFlywheelLeftId, MotorType.kBrushless);
     flywheelLeft.restoreFactoryDefaults();
+    flywheelLeft.setInverted(true);
     m_pidController = flywheelLeft.getPIDController();
 
     flywheelRight = new CANSparkMax(Constants.kFlywheelRightId, MotorType.kBrushless);
-    flywheelRight.follow(flywheelLeft, true);
+    flywheelRight.follow(flywheelLeft);
 
     // initialize encoder
     m_encoder = flywheelLeft.getEncoder();
