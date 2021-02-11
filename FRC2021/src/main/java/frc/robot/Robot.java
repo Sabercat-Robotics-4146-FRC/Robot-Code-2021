@@ -15,6 +15,7 @@ import frc.robot.controller.XboxController.Side;
 import frc.robot.Constants;
 import frc.robot.loops.Looper;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Intake;
 
 public class Robot extends TimedRobot {
 	Looper mEnabledLooper = new Looper();
@@ -23,12 +24,14 @@ public class Robot extends TimedRobot {
 	private final SubsystemManager mSubsystemManager = SubsystemManager.getInstance();
 
 	private Drive mDrive;
+	private Intake mIntake;
 	
 	private XboxController mDriver1XboxController;
 
 	@Override
 	public void robotInit() {
 		mDrive = Drive.getInstance();
+		mIntake = Intake.getInstance();
 		mSubsystemManager.setSubsystems(mDrive);
 
 		mDriver1XboxController = new XboxController(Constants.kDriver1USBPort);
@@ -58,5 +61,6 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
 		mDrive.setCheesyishDrive(mDriver1XboxController.getJoystick(Side.LEFT,Axis.Y), -mDriver1XboxController.getJoystick(Side.RIGHT, Axis.X), mDriver1XboxController.getButton(Button.A));
+		mIntake.setIndexer(mDriver1XboxController.getButton(Button.Y), mDriver1XboxController.getButton(Button.X));
 	}
 }

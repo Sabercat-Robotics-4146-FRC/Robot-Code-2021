@@ -24,6 +24,12 @@ public class Constants {
     public static final double kDriveWheelTrackWidthInches = 25.42;
     public static final double kTrackScrubFactor = 1.0469745223;
 
+    // Intake
+    public static final int kIndexerMotorId1 = 14;
+    public static final int kIndexerMotorId2 = 13;
+    public static final int kIndexerMotorId3 = 12;
+    public static final int kIndexerMotorId4 = 11;
+
     // Xbox Controllers
     public static final int kDriver1USBPort = 0;
     public static final int kDriver2USBPort = 1;
@@ -31,8 +37,9 @@ public class Constants {
 
 
     // Flywheel
-    public static final int kFlywheelMasterId = 6;
-    public static final int kFlywheelSlaveId = 7;
+    public static final int kFlywheelMasterId = 7;
+    public static final int kFlywheelSlaveId = 8;
+    public static final int kTurretLeftRight = 9;
     public static final double kFlywheelKp = 0.0;
     public static final double kFlywheelKi = 0.0;
     public static final double kFlywheelKd = 0.0;
