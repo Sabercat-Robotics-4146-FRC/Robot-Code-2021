@@ -32,9 +32,9 @@ public class Intake extends Subsystem {
     private final CANSparkMax mSparkMaxID8;
 
     private Intake() {
-        mIRSensor1 = new DigitalInput(1);
-        mIRSensor2 = new DigitalInput(2);
-        mIRSensor3 = new DigitalInput(3);
+        mIRSensor1 = new DigitalInput(3);
+        mIRSensor2 = new DigitalInput(4);
+        mIRSensor3 = new DigitalInput(5);
 
         mSparkMaxID14 = new CANSparkMax(Constants.kIndexerMotorId1, MotorType.kBrushless);
         mSparkMaxID13 = new CANSparkMax(Constants.kIndexerMotorId2, MotorType.kBrushless);
