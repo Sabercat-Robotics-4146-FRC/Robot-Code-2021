@@ -27,7 +27,6 @@ public class TurretAndFlywheel extends Subsystem {
 
   private LimelightManager mLLManager;
 
-  private DigitalInput leftLimitSwitch;
   private DigitalInput rightLimitSwitch;
 
   private Servo servoLeft;
@@ -38,19 +37,21 @@ public class TurretAndFlywheel extends Subsystem {
   private CANSparkMax flywheelRight;
   private CANPIDController m_pidController;
   private CANEncoder m_encoder;
+  private CANEncoder m_tEncoder;
 
   private double LLkP, minCommand;
   private double tX;
 
   private TurretAndFlywheel() {
     // flywheelLeft
-    flywheelLeft = new CANSparkMax(Constants.kFlywheelLeftId, MotorType.kBrushless);
-    flywheelLeft.restoreFactoryDefaults();
-    flywheelLeft.setInverted(true);
-    m_pidController = flywheelLeft.getPIDController();
-
     flywheelRight = new CANSparkMax(Constants.kFlywheelRightId, MotorType.kBrushless);
-    flywheelRight.follow(flywheelLeft);
+    flywheelRight.restoreFactoryDefaults();
+    m_pidController = flywheelRight.getPIDController();
+    
+    flywheelLeft = new CANSparkMax(Constants.kFlywheelLeftId, MotorType.kBrushless);
+    flywheelLeft.follow(flywheelRight,true);
+
+
 
     // initialize encoder
     m_encoder = flywheelLeft.getEncoder();
@@ -65,7 +66,7 @@ public class TurretAndFlywheel extends Subsystem {
 
     // turret
     turret = new CANSparkMax(Constants.kTurretId, MotorType.kBrushless);
-    leftLimitSwitch = new DigitalInput(Constants.kTurretLeftLimitSwitchId);
+    m_tEncoder = turret.getEncoder();
     rightLimitSwitch = new DigitalInput(Constants.kTurretRightLimitSwitchId);
     servoLeft = new Servo(0);
     servoRight = new Servo(1);
@@ -130,19 +131,17 @@ public class TurretAndFlywheel extends Subsystem {
         }
         input -= steeringAjustment;
       } else {
-        input = manualInput;
+        input = manualInput/3;
       }
     } else {
-      input = manualInput;
-      mLLManager.setLeds(Limelight.LedMode.ON);
+      input = manualInput/3;
+      mLLManager.setLeds(Limelight.LedMode.OFF);
     }
 
-    if (leftLimitSwitch
-        .get()) { // If the forward limit switch is pressed, we want to keep the values between -1
+    if (rightLimitSwitch.get() & (m_tEncoder.getPosition() > 0)) { // If the forward limit switch is pressed, we want to keep the values between -1
       // and 0
       output = Math.min(input, 0);
-    } else if (rightLimitSwitch
-        .get()) { // If the reversed limit switch is pressed, we want to keep the values between 0
+    } else if (rightLimitSwitch.get() & (m_tEncoder.getPosition() <= 0)) { // If the reversed limit switch is pressed, we want to keep the values between 0
       // and 1
       output = Math.max(input, 0);
     } else {
@@ -214,8 +213,11 @@ public class TurretAndFlywheel extends Subsystem {
   public void outputTelemetry() {
     mLLManager.outputTelemetry();
     SmartDashboard.putNumber("Flywheel RPM", m_encoder.getVelocity() * 2);
+    SmartDashboard.putNumber("right speed", flywheelRight.get());
+    SmartDashboard.putNumber("left speed", flywheelLeft.get());
     SmartDashboard.putNumber("Flywheel Demand", mPeriodicIO.flywheelDemand);
+    SmartDashboard.putNumber("turret pos", m_tEncoder.getPosition());
+    SmartDashboard.putNumber("Turret Demand", mPeriodicIO.turretDemand);
     SmartDashboard.putBoolean("right limit switch", rightLimitSwitch.get());
-    SmartDashboard.putBoolean("left limit switch", leftLimitSwitch.get());
   }
 }

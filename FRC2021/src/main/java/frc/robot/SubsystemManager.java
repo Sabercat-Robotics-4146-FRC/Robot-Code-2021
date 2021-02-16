@@ -62,6 +62,7 @@ public class SubsystemManager implements ILooper {
       mAllSubsystems.forEach(Subsystem::readPeriodicInputs);
       mLoops.forEach(l -> l.onLoop(timestamp));
       mAllSubsystems.forEach(Subsystem::writePeriodicOutputs);
+      mAllSubsystems.forEach(Subsystem::outputTelemetry);
     }
 
     @Override

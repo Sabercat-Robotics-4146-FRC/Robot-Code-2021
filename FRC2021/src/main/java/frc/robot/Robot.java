@@ -23,8 +23,8 @@ public class Robot extends TimedRobot {
   private Joystick mController;
 
   public TurretAndFlywheel mTurretAndFlywheel;
-  public Intake mIntake;
-  public Pneumatics mPneumatics;
+  // public Intake mIntake;
+  // public Pneumatics mPneumatics;
 
   private boolean AButtonFlag = false;
   public boolean BButtonFlag = false;
@@ -39,12 +39,12 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     mDrive = Drive.getInstance();
-    mIntake = Intake.getInstance();
+    // mIntake = Intake.getInstance();
     mTurretAndFlywheel = TurretAndFlywheel.getInstance();
-    mPneumatics = Pneumatics.getInstance();
+    // mPneumatics = Pneumatics.getInstance();
 
     mSubsystemManager.setSubsystems(
-        new Subsystem[] {mDrive, mIntake, mTurretAndFlywheel, mPneumatics});
+        new Subsystem[] {mDrive, mTurretAndFlywheel});
 
     mController = new Joystick(Constants.kDriver1USBPort);
 
@@ -74,8 +74,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     // mDrive.setCheesyishDrive(mThrottleStick.getRawAxis(1), -mTurnStick.getRawAxis(0),
     // mTurnStick.getRawButton(1));
-    mDrive.setCheesyishDrive(
-        mController.getRawAxis(1), -mController.getRawAxis(4), mController.getRawButton(4));
+    mDrive.setCheesyishDrive( -mController.getRawAxis(1), mController.getRawAxis(4), mController.getRawButton(4));
 
     if (mController.getRawButtonPressed(3) && !XButtonFlag) {
       XButtonFlag = true;
@@ -86,10 +85,9 @@ public class Robot extends TimedRobot {
       XButtonFlag = false;
     }
 
-    mTurretAndFlywheel.turretTurning(
-        mController.getRawAxis(2) - mController.getRawAxis(3), limelightToggle);
-    mTurretAndFlywheel.flywheel(0, limelightToggle);
-    mTurretAndFlywheel.hood(.6);
+    mTurretAndFlywheel.turretTurning(mController.getRawAxis(2) - mController.getRawAxis(3), limelightToggle);
+    // mTurretAndFlywheel.flywheel(4800, limelightToggle);
+    mTurretAndFlywheel.hood(0);
 
     if (mController.getRawButtonPressed(1) && !AButtonFlag) {
       AButtonFlag = true;
@@ -100,7 +98,7 @@ public class Robot extends TimedRobot {
       AButtonFlag = false;
     }
 
-    mIntake.intakeToggle(intakeToggle);
+    // mIntake.intakeToggle(intakeToggle);
 
     if (mController.getRawButtonPressed(2) && !BButtonFlag) {
       BButtonFlag = true;
@@ -111,6 +109,6 @@ public class Robot extends TimedRobot {
       BButtonFlag = false;
     }
 
-    mPneumatics.solenoid(pneumaticsToggle);
+    // mPneumatics.solenoid(pneumaticsToggle);
   }
 }

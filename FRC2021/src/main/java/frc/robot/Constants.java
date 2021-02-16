@@ -30,30 +30,29 @@ public class Constants {
   public static final double kJoystickThreshold = 0.2;
 
   // Flywheel
-  public static final int kFlywheelLeftId = 7;
-  public static final int kFlywheelRightId = 8;
-  public static final double kFlywheelKp = .001;
+  public static final int kFlywheelLeftId = 8;
+  public static final int kFlywheelRightId = 7;
+  public static final double kFlywheelKp = 6e-5;
   public static final double kFlywheelKi = 0.0;
   public static final double kFlywheelKd = 0;
   public static final double kFlywheelKIz = 0;
-  public static final double kFlywheelKf = .00019788;
+  public static final double kFlywheelKf = .000015;
   public static final double kFlywheelMinOutput = -1;
   public static final double kFlywheelMaxOutput = 1;
   public static final double kFlywheelMaxRPM = 5700;
 
   // Turret
   public static final int kTurretId = 9;
-  public static final int kTurretLeftLimitSwitchId = 2;
-  public static final int kTurretRightLimitSwitchId = 1;
+  public static final int kTurretRightLimitSwitchId = 0;
 
-  public static final double kTurretKp = .1;
+  public static final double kTurretKp = .01;
   public static final double kTurretMinCommand = .05;
 
   // intake
-  public static final int kRollerId = 6;
-  public static final int kArmPivotId = 7;
-  public static final int kIntakeTopLimitSwitchId = 4;
-  public static final int kIntakeBottomLimitSwitchId = 3;
+  // public static final int kRollerId = 6;
+  // public static final int kArmPivotId = 7;
+  // public static final int kIntakeTopLimitSwitchId = 4;
+  // public static final int kIntakeBottomLimitSwitchId = 3;
 
   // limelight
   public static final double kHorizontalFOV = 59.6; // degrees
