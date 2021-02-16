@@ -39,7 +39,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     mDrive = Drive.getInstance();
-    // mIntake = Intake.getInstance();
     mTurretAndFlywheel = TurretAndFlywheel.getInstance();
     // mPneumatics = Pneumatics.getInstance();
 
@@ -72,8 +71,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    // mDrive.setCheesyishDrive(mThrottleStick.getRawAxis(1), -mTurnStick.getRawAxis(0),
-    // mTurnStick.getRawButton(1));
     mDrive.setCheesyishDrive( -mController.getRawAxis(1), mController.getRawAxis(4), mController.getRawButton(4));
 
     if (mController.getRawButtonPressed(3) && !XButtonFlag) {
@@ -98,8 +95,6 @@ public class Robot extends TimedRobot {
       AButtonFlag = false;
     }
 
-    // mIntake.intakeToggle(intakeToggle);
-
     if (mController.getRawButtonPressed(2) && !BButtonFlag) {
       BButtonFlag = true;
       pneumaticsToggle = !pneumaticsToggle;
@@ -108,7 +103,5 @@ public class Robot extends TimedRobot {
     if (!mController.getRawButtonPressed(2)) {
       BButtonFlag = false;
     }
-
-    // mPneumatics.solenoid(pneumaticsToggle);
   }
 }

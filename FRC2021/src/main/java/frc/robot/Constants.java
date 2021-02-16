@@ -48,11 +48,6 @@ public class Constants {
   public static final double kTurretKp = .01;
   public static final double kTurretMinCommand = .05;
 
-  // intake
-  // public static final int kRollerId = 6;
-  // public static final int kArmPivotId = 7;
-  // public static final int kIntakeTopLimitSwitchId = 4;
-  // public static final int kIntakeBottomLimitSwitchId = 3;
 
   // limelight
   public static final double kHorizontalFOV = 59.6; // degrees
