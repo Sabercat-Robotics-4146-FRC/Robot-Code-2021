@@ -56,6 +56,7 @@ public class TurretAndFlywheel extends Subsystem {
     // initialize encoder
     m_encoder = flywheelLeft.getEncoder();
 
+
     // set gains
     m_pidController.setP(Constants.kFlywheelKp);
     m_pidController.setI(Constants.kFlywheelKi);
@@ -86,6 +87,14 @@ public class TurretAndFlywheel extends Subsystem {
     double velocity_ticks_per_100_ms = 0.0;
     double distanceToTarget;
     boolean SeesTarget;
+    double kP = Constants.kFlywheelKp; 
+    double kI = Constants.kFlywheelKi;
+    double kD = Constants.kFlywheelKd; 
+    double kIz = Constants.kFlywheelKIz; 
+    double kFF = Constants.kFlywheelKf; 
+    double kMaxOutput = Constants.kFlywheelMaxOutput; 
+    double kMinOutput = Constants.kFlywheelMinOutput;
+    double maxRPM = Constants.kFlywheelMaxRPM;
 
     // outputs
     double turretDemand;
@@ -155,6 +164,27 @@ public class TurretAndFlywheel extends Subsystem {
     SmartDashboard.putNumber("output", output);
   }
 
+  public void shuffleboard() {
+    double p = SmartDashboard.getNumber("kp", 0);
+    double i = SmartDashboard.getNumber("ki", 0);
+    double d = SmartDashboard.getNumber("kd", 0);
+    double iz = SmartDashboard.getNumber("kiz", 0);
+    double ff = SmartDashboard.getNumber("kff", 0);
+    double max = SmartDashboard.getNumber("max", 0);
+    double min = SmartDashboard.getNumber("min", 0);
+
+    // if PID coefficients on SmartDashboard have changed, write new values to controller
+    if((p != mPeriodicIO.kP)) { m_pidController.setP(p); mPeriodicIO.kP = p; }
+    if((i != mPeriodicIO.kI)) { m_pidController.setI(i); mPeriodicIO.kI = i; }
+    if((d != mPeriodicIO.kD)) { m_pidController.setD(d); mPeriodicIO.kD = d; }
+    if((iz != mPeriodicIO.kIz)) { m_pidController.setIZone(iz); mPeriodicIO.kIz = iz; }
+    if((ff != mPeriodicIO.kFF)) { m_pidController.setFF(ff); mPeriodicIO.kFF = ff; }
+    if((max != mPeriodicIO.kMaxOutput) || (min != mPeriodicIO.kMinOutput)) { 
+      m_pidController.setOutputRange(min, max); 
+      mPeriodicIO.kMinOutput = min; mPeriodicIO.kMaxOutput = max; 
+    }
+  }
+  
   public synchronized void flywheel(double RPM, boolean buttonInput) {
     if (buttonInput) {
       if (mPeriodicIO.SeesTarget && (mPeriodicIO.turretDemand == 0)) {
@@ -180,6 +210,7 @@ public class TurretAndFlywheel extends Subsystem {
     mLLManager.readPeriodicInputs();
     mPeriodicIO.SeesTarget = mLLManager.SeesTarget();
     mPeriodicIO.distanceToTarget = mLLManager.getDistance();
+    shuffleboard();
   }
 
   @Override
@@ -219,5 +250,12 @@ public class TurretAndFlywheel extends Subsystem {
     SmartDashboard.putNumber("turret pos", m_tEncoder.getPosition());
     SmartDashboard.putNumber("Turret Demand", mPeriodicIO.turretDemand);
     SmartDashboard.putBoolean("right limit switch", rightLimitSwitch.get());
+    SmartDashboard.putNumber("kp", Constants.kFlywheelKp);
+    SmartDashboard.putNumber("ki", Constants.kFlywheelKi);
+    SmartDashboard.putNumber("kd", Constants.kFlywheelKd);
+    SmartDashboard.putNumber("kiz", Constants.kFlywheelKIz);
+    SmartDashboard.putNumber("kff", Constants.kFlywheelKf);
+    SmartDashboard.putNumber("max", Constants.kFlywheelMaxOutput);
+    SmartDashboard.putNumber("min", Constants.kFlywheelMinOutput);
   }
 }

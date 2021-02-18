@@ -14,7 +14,8 @@ public class Constants {
 
   // Pneumatics
   public static final int kPCMId = 0;
-  public static final int kSolenoidId = 0;
+  public static final int kSolenoid1Id = 0;
+  public static final int kSolenoid2Id = 1;
 
   // Drive
   public static final int kDriveRightMasterId = 1;
@@ -32,7 +33,7 @@ public class Constants {
   // Flywheel
   public static final int kFlywheelLeftId = 8;
   public static final int kFlywheelRightId = 7;
-  public static final double kFlywheelKp = 6e-5;
+  public static final double kFlywheelKp = 6e-4;
   public static final double kFlywheelKi = 0.0;
   public static final double kFlywheelKd = 0;
   public static final double kFlywheelKIz = 0;
@@ -45,7 +46,7 @@ public class Constants {
   public static final int kTurretId = 9;
   public static final int kTurretRightLimitSwitchId = 0;
 
-  public static final double kTurretKp = .01;
+  public static final double kTurretKp = .02;
   public static final double kTurretMinCommand = .05;
 
 
