@@ -47,15 +47,12 @@ public class TurretAndFlywheel extends Subsystem {
     flywheelRight = new CANSparkMax(Constants.kFlywheelRightId, MotorType.kBrushless);
     flywheelRight.restoreFactoryDefaults();
     m_pidController = flywheelRight.getPIDController();
-    
+
     flywheelLeft = new CANSparkMax(Constants.kFlywheelLeftId, MotorType.kBrushless);
-    flywheelLeft.follow(flywheelRight,true);
-
-
+    flywheelLeft.follow(flywheelRight, true);
 
     // initialize encoder
     m_encoder = flywheelLeft.getEncoder();
-
 
     // set gains
     m_pidController.setP(Constants.kFlywheelKp);
@@ -87,12 +84,12 @@ public class TurretAndFlywheel extends Subsystem {
     double velocity_ticks_per_100_ms = 0.0;
     double distanceToTarget;
     boolean SeesTarget;
-    double kP = Constants.kFlywheelKp; 
+    double kP = Constants.kFlywheelKp;
     double kI = Constants.kFlywheelKi;
-    double kD = Constants.kFlywheelKd; 
-    double kIz = Constants.kFlywheelKIz; 
-    double kFF = Constants.kFlywheelKf; 
-    double kMaxOutput = Constants.kFlywheelMaxOutput; 
+    double kD = Constants.kFlywheelKd;
+    double kIz = Constants.kFlywheelKIz;
+    double kFF = Constants.kFlywheelKf;
+    double kMaxOutput = Constants.kFlywheelMaxOutput;
     double kMinOutput = Constants.kFlywheelMinOutput;
     double maxRPM = Constants.kFlywheelMaxRPM;
 
@@ -140,17 +137,22 @@ public class TurretAndFlywheel extends Subsystem {
         }
         input -= steeringAjustment;
       } else {
-        input = manualInput/3;
+        input = manualInput / 3;
       }
     } else {
-      input = manualInput/3;
+      input = manualInput / 3;
       mLLManager.setLeds(Limelight.LedMode.OFF);
     }
 
-    if (rightLimitSwitch.get() & (m_tEncoder.getPosition() > 0)) { // If the forward limit switch is pressed, we want to keep the values between -1
+    if (rightLimitSwitch.get()
+        & (m_tEncoder.getPosition()
+            > 0)) { // If the forward limit switch is pressed, we want to keep the values between -1
       // and 0
       output = Math.min(input, 0);
-    } else if (rightLimitSwitch.get() & (m_tEncoder.getPosition() <= 0)) { // If the reversed limit switch is pressed, we want to keep the values between 0
+    } else if (rightLimitSwitch.get()
+        & (m_tEncoder.getPosition()
+            <= 0)) { // If the reversed limit switch is pressed, we want to keep the values between
+      // 0
       // and 1
       output = Math.max(input, 0);
     } else {
@@ -174,17 +176,33 @@ public class TurretAndFlywheel extends Subsystem {
     double min = SmartDashboard.getNumber("min", 0);
 
     // if PID coefficients on SmartDashboard have changed, write new values to controller
-    if((p != mPeriodicIO.kP)) { m_pidController.setP(p); mPeriodicIO.kP = p; }
-    if((i != mPeriodicIO.kI)) { m_pidController.setI(i); mPeriodicIO.kI = i; }
-    if((d != mPeriodicIO.kD)) { m_pidController.setD(d); mPeriodicIO.kD = d; }
-    if((iz != mPeriodicIO.kIz)) { m_pidController.setIZone(iz); mPeriodicIO.kIz = iz; }
-    if((ff != mPeriodicIO.kFF)) { m_pidController.setFF(ff); mPeriodicIO.kFF = ff; }
-    if((max != mPeriodicIO.kMaxOutput) || (min != mPeriodicIO.kMinOutput)) { 
-      m_pidController.setOutputRange(min, max); 
-      mPeriodicIO.kMinOutput = min; mPeriodicIO.kMaxOutput = max; 
+    if ((p != mPeriodicIO.kP)) {
+      m_pidController.setP(p);
+      mPeriodicIO.kP = p;
+    }
+    if ((i != mPeriodicIO.kI)) {
+      m_pidController.setI(i);
+      mPeriodicIO.kI = i;
+    }
+    if ((d != mPeriodicIO.kD)) {
+      m_pidController.setD(d);
+      mPeriodicIO.kD = d;
+    }
+    if ((iz != mPeriodicIO.kIz)) {
+      m_pidController.setIZone(iz);
+      mPeriodicIO.kIz = iz;
+    }
+    if ((ff != mPeriodicIO.kFF)) {
+      m_pidController.setFF(ff);
+      mPeriodicIO.kFF = ff;
+    }
+    if ((max != mPeriodicIO.kMaxOutput) || (min != mPeriodicIO.kMinOutput)) {
+      m_pidController.setOutputRange(min, max);
+      mPeriodicIO.kMinOutput = min;
+      mPeriodicIO.kMaxOutput = max;
     }
   }
-  
+
   public synchronized void flywheel(double RPM, boolean buttonInput) {
     if (buttonInput) {
       if (mPeriodicIO.SeesTarget && (mPeriodicIO.turretDemand == 0)) {

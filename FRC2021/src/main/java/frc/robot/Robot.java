@@ -41,8 +41,7 @@ public class Robot extends TimedRobot {
     mTurretAndFlywheel = TurretAndFlywheel.getInstance();
     mPneumatics = Pneumatics.getInstance();
 
-    mSubsystemManager.setSubsystems(
-        new Subsystem[] {mDrive, mTurretAndFlywheel, mPneumatics});
+    mSubsystemManager.setSubsystems(new Subsystem[] {mDrive, mTurretAndFlywheel, mPneumatics});
 
     mController = new Joystick(Constants.kDriver1USBPort);
 
@@ -70,7 +69,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    mDrive.setCheesyishDrive( -mController.getRawAxis(1), -mController.getRawAxis(4), mController.getRawButton(4));
+    mDrive.setCheesyishDrive(
+        -mController.getRawAxis(1), -mController.getRawAxis(4), mController.getRawButton(4));
 
     if (mController.getRawButtonPressed(3) && !XButtonFlag) {
       XButtonFlag = true;
@@ -81,7 +81,8 @@ public class Robot extends TimedRobot {
       XButtonFlag = false;
     }
 
-    mTurretAndFlywheel.turretTurning(mController.getRawAxis(2) - mController.getRawAxis(3), limelightToggle);
+    mTurretAndFlywheel.turretTurning(
+        mController.getRawAxis(2) - mController.getRawAxis(3), limelightToggle);
     mTurretAndFlywheel.flywheel(0, limelightToggle);
     mTurretAndFlywheel.hood(0);
 

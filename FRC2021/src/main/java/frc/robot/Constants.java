@@ -49,7 +49,6 @@ public class Constants {
   public static final double kTurretKp = .02;
   public static final double kTurretMinCommand = .05;
 
-
   // limelight
   public static final double kHorizontalFOV = 59.6; // degrees
   public static final double kVerticalFOV = 49.7; // degrees
