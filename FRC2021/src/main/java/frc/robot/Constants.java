@@ -33,9 +33,9 @@ public class Constants {
   // Flywheel
   public static final int kFlywheelLeftId = 8;
   public static final int kFlywheelRightId = 7;
-  public static final double kFlywheelKp = 6e-4;
+  public static final double kFlywheelKp = 6e-3;
   public static final double kFlywheelKi = 0.0;
-  public static final double kFlywheelKd = 0;
+  public static final double kFlywheelKd = 0.2;
   public static final double kFlywheelKIz = 0;
   public static final double kFlywheelKf = .000015;
   public static final double kFlywheelMinOutput = -1;
