@@ -14,9 +14,7 @@ import frc.robot.controller.XboxController.Button;
 import frc.robot.controller.XboxController.Side;
 import frc.robot.Constants;
 import frc.robot.loops.Looper;
-import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Pneumatics;
+import frc.robot.subsystems.*;
 
 public class Robot extends TimedRobot {
 	Looper mEnabledLooper = new Looper();
@@ -26,6 +24,7 @@ public class Robot extends TimedRobot {
 
 	private Drive mDrive;
 	private Intake mIntake;
+	private LED mLED;
 	private Pneumatics mPneumatics;
 	
 	private XboxController mDriver1XboxController;
@@ -35,6 +34,7 @@ public class Robot extends TimedRobot {
 		mDrive = Drive.getInstance();
 		mIntake = Intake.getInstance();
 		mPneumatics = Pneumatics.getInstance();
+		mLED = LED.getInstance();
 		mSubsystemManager.setSubsystems(mDrive);
 
 		mDriver1XboxController = new XboxController(Constants.kDriver1USBPort);
@@ -65,6 +65,7 @@ public class Robot extends TimedRobot {
 	public void teleopPeriodic() {
 		mDrive.setCheesyishDrive(mDriver1XboxController.getJoystick(Side.LEFT,Axis.Y), -mDriver1XboxController.getJoystick(Side.RIGHT, Axis.X), mDriver1XboxController.getButton(Button.A));
 		mIntake.setIndexer(mDriver1XboxController.getButton(Button.Y), mDriver1XboxController.getButton(Button.X));
+		mLED.setLedColor(mDriver1XboxController.getButton(Button.Y), mDriver1XboxController.getButton(Button.X), mDriver1XboxController.getButton(Button.B), mDriver1XboxController.getButton(Button.A));
 		mPneumatics.solenoid(false);
 	}
 }

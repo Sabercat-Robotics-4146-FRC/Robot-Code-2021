@@ -16,6 +16,9 @@ public class Constants {
     public static final int kPCMId = 0;
     public static final int kSolenoidId = 0;
 
+    // LED
+    public static final int kLedStripLength = 25;
+
     // Drive
     public static final int kDriveRightMasterId = 1;
     public static final int kDriveRightSlaveId = 2;
