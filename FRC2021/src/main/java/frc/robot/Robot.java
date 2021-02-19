@@ -63,9 +63,13 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopPeriodic() {
-		mDrive.setCheesyishDrive(mDriver1XboxController.getJoystick(Side.LEFT,Axis.Y), -mDriver1XboxController.getJoystick(Side.RIGHT, Axis.X), mDriver1XboxController.getButton(Button.A));
+		mDrive.setCheesyishDrive(mDriver1XboxController.getJoystick(Side.LEFT,Axis.Y),
+							    -mDriver1XboxController.getJoystick(Side.RIGHT, Axis.X), mDriver1XboxController.getButton(Button.A));
 		mIntake.setIndexer(mDriver1XboxController.getButton(Button.Y), mDriver1XboxController.getButton(Button.X));
-		mLED.setLedColor(mDriver1XboxController.getButton(Button.Y), mDriver1XboxController.getButton(Button.X), mDriver1XboxController.getButton(Button.B), mDriver1XboxController.getButton(Button.A));
+
+		mLED.setLedColor(mDriver1XboxController.getButton(Button.Y), mDriver1XboxController.getButton(Button.X),
+		                 mDriver1XboxController.getButton(Button.B), mDriver1XboxController.getButton(Button.A));
+						 
 		mPneumatics.solenoid(false);
 	}
 }
