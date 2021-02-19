@@ -46,29 +46,29 @@ public class Intake extends Subsystem {
     }
 
     public synchronized void setIndexer(boolean shootBall, boolean stopIntake) {
-        if (mIRSensor3.get() == true) {
-            mSparkMaxID12.set(-.1);
-            mSparkMaxID13.set(-.1);
-            mSparkMaxID14.set(-.1);
-        }
+        // if (mIRSensor3.get() == true) {
+        //     mSparkMaxID12.set(-.1);
+        //     mSparkMaxID13.set(-.1);
+        //     mSparkMaxID14.set(-.1);
+        // }
 
-        if (mIRSensor3.get() == false && mIRSensor2.get() == true) {
-            mSparkMaxID12.set(0);
-            mSparkMaxID13.set(-.1);
-            mSparkMaxID14.set(-.1);
-        }
+        // if (mIRSensor3.get() == false && mIRSensor2.get() == true) {
+        //     mSparkMaxID12.set(0);
+        //     mSparkMaxID13.set(-.1);
+        //     mSparkMaxID14.set(-.1);
+        // }
 
-        if (mIRSensor3.get() == false && mIRSensor2.get() == false && mIRSensor1.get() == true) {
-            mSparkMaxID12.set(0);
-            mSparkMaxID13.set(0);
-            mSparkMaxID14.set(-.1);
-        }
+        // if (mIRSensor3.get() == false && mIRSensor2.get() == false && mIRSensor1.get() == true) {
+        //     mSparkMaxID12.set(0);
+        //     mSparkMaxID13.set(0);
+        //     mSparkMaxID14.set(-.1);
+        // }
 
-        if (mIRSensor3.get() == false && mIRSensor2.get() == false && mIRSensor1.get() == false) {
-            mSparkMaxID12.set(0);
-            mSparkMaxID13.set(0);
-            mSparkMaxID14.set(0);
-        }
+        // if (mIRSensor3.get() == false && mIRSensor2.get() == false && mIRSensor1.get() == false) {
+        //     mSparkMaxID12.set(0);
+        //     mSparkMaxID13.set(0);
+        //     mSparkMaxID14.set(0);
+        // }
 
         if (shootBall == true) {
             mSparkMaxID14.stopMotor();
