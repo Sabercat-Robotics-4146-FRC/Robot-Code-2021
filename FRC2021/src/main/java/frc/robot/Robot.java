@@ -69,8 +69,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    mDrive.setCheesyishDrive(
-        -mController.getRawAxis(1), -mController.getRawAxis(4), mController.getRawButton(4));
+    // mDrive.setCheesyishDrive(
+    //     -mController.getRawAxis(1), -mController.getRawAxis(4), mController.getRawButton(4));
 
     if (mController.getRawButtonPressed(3) && !XButtonFlag) {
       XButtonFlag = true;
@@ -83,8 +83,8 @@ public class Robot extends TimedRobot {
 
     mTurretAndFlywheel.turretTurning(
         mController.getRawAxis(2) - mController.getRawAxis(3), limelightToggle);
-    mTurretAndFlywheel.flywheel(0, limelightToggle);
-    mTurretAndFlywheel.hood(0);
+    // mTurretAndFlywheel.flywheel(0, limelightToggle);
+    // mTurretAndFlywheel.hood(.6);
 
     if (mController.getRawButtonPressed(1) && !AButtonFlag) {
       AButtonFlag = true;

@@ -29,8 +29,8 @@ public class TurretAndFlywheel extends Subsystem {
 
   private DigitalInput rightLimitSwitch;
 
-  private Servo servoLeft;
   private Servo servoRight;
+  private Servo servoLeft;
 
   private double kP = Constants.kFlywheelKp;
   private double kI = Constants.kFlywheelKi;
@@ -39,6 +39,8 @@ public class TurretAndFlywheel extends Subsystem {
   private double kFF = Constants.kFlywheelKf;
   private double kMaxOutput = Constants.kFlywheelMaxOutput;
   private double kMinOutput = Constants.kFlywheelMinOutput;
+  private double kSpeed = 0.0;
+  private double khood = 0.0;
 
   private CANSparkMax turret;
   private CANSparkMax flywheelLeft;
@@ -69,6 +71,8 @@ public class TurretAndFlywheel extends Subsystem {
     SmartDashboard.putNumber("kff", kFF);
     SmartDashboard.putNumber("max", kMaxOutput);
     SmartDashboard.putNumber("min", kMinOutput);
+    SmartDashboard.putNumber("Speed", kSpeed);
+    SmartDashboard.putNumber("hood", khood);
 
     // set gains
     m_pidController.setP(kP);
@@ -82,14 +86,16 @@ public class TurretAndFlywheel extends Subsystem {
     turret = new CANSparkMax(Constants.kTurretId, MotorType.kBrushless);
     m_tEncoder = turret.getEncoder();
     rightLimitSwitch = new DigitalInput(Constants.kTurretRightLimitSwitchId);
-    servoLeft = new Servo(0);
-    servoRight = new Servo(1);
-    servoLeft.setBounds(2.0, 1.8, 1.5, 1.2, 1.0);
-    servoLeft.setSpeed(1.0); // to open
-    servoLeft.setSpeed(-1.0); // to close
+    servoRight = new Servo(0);
+    servoLeft = new Servo(1);
     servoRight.setBounds(2.0, 1.8, 1.5, 1.2, 1.0);
     servoRight.setSpeed(1.0); // to open
     servoRight.setSpeed(-1.0); // to close
+    servoRight.set(khood);
+    servoLeft.setBounds(2.0, 1.8, 1.5, 1.2, 1.0);
+    servoLeft.setSpeed(1.0); // to open
+    servoLeft.setSpeed(-1.0); // to close
+    servoLeft.set(khood);
 
     // limelight
     mLLManager = LimelightManager.getInstance();
@@ -174,21 +180,21 @@ public class TurretAndFlywheel extends Subsystem {
     SmartDashboard.putNumber("output", output);
   }
 
-  public synchronized void flywheel(double RPM, boolean buttonInput) {
-    if (buttonInput) {
-      if (mPeriodicIO.SeesTarget && (mPeriodicIO.turretDemand == 0)) {
-        if ((RPM) > Constants.kFlywheelMaxRPM) {
-          setRPM(Constants.kFlywheelMaxRPM);
-        } else {
-          setRPM(RPM);
-        }
-      } else {
-        setRPM(0.0);
-      }
-    } else {
-      setRPM(0.0);
-    }
-  }
+  // public synchronized void flywheel(double RPM, boolean buttonInput) {
+  //   if (buttonInput) {
+  //     if (mPeriodicIO.SeesTarget && (mPeriodicIO.turretDemand == 0)) {
+  //       if ((RPM) > Constants.kFlywheelMaxRPM) {
+  //         setRPM(Constants.kFlywheelMaxRPM);
+  //       } else {
+  //         setRPM(RPM);
+  //       }
+  //     } else {
+  //       setRPM(0.0);
+  //     }
+  //   } else {
+  //     setRPM(0.0);
+  //   }
+  // }
 
   public synchronized void hood(double demand) {
     mPeriodicIO.servoDemand = demand;
@@ -203,10 +209,6 @@ public class TurretAndFlywheel extends Subsystem {
 
   @Override
   public void writePeriodicOutputs() {
-    m_pidController.setReference(1500, ControlType.kVelocity);
-    turret.set(mPeriodicIO.turretDemand);
-    servoLeft.set(mPeriodicIO.servoDemand);
-    mLLManager.writePeriodicOutputs();
     double p = SmartDashboard.getNumber("kp", 0);
     double i = SmartDashboard.getNumber("ki", 0);
     double d = SmartDashboard.getNumber("kd", 0);
@@ -214,6 +216,8 @@ public class TurretAndFlywheel extends Subsystem {
     double ff = SmartDashboard.getNumber("kff", 0);
     double max = SmartDashboard.getNumber("max", 0);
     double min = SmartDashboard.getNumber("min", 0);
+    double speed = SmartDashboard.getNumber("Speed", 0);
+    double hood = SmartDashboard.getNumber("hood", 0);
 
     // if PID coefficients on SmartDashboard have changed, write new values to controller
     if ((p != kP)) {
@@ -241,6 +245,19 @@ public class TurretAndFlywheel extends Subsystem {
       kMinOutput = min;
       kMaxOutput = max;
     }
+    if (speed != kSpeed) {
+      setRPM(speed);
+      kSpeed = speed;
+    }
+    if (hood != khood) {
+      hood(hood);
+      khood = hood;
+    }
+    m_pidController.setReference(mPeriodicIO.flywheelDemand, ControlType.kVelocity);
+    turret.set(mPeriodicIO.turretDemand);
+    servoRight.set(mPeriodicIO.servoDemand);
+    servoLeft.set(mPeriodicIO.servoDemand);
+    mLLManager.writePeriodicOutputs();
   }
 
   @Override

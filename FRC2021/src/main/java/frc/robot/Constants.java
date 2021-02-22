@@ -33,11 +33,11 @@ public class Constants {
   // Flywheel
   public static final int kFlywheelLeftId = 8;
   public static final int kFlywheelRightId = 7;
-  public static final double kFlywheelKp = 6e-3;
+  public static final double kFlywheelKp = 0.0;
   public static final double kFlywheelKi = 0.0;
-  public static final double kFlywheelKd = 0.2;
+  public static final double kFlywheelKd = 0.0;
   public static final double kFlywheelKIz = 0;
-  public static final double kFlywheelKf = .000015;
+  public static final double kFlywheelKf = .0;
   public static final double kFlywheelMinOutput = -1;
   public static final double kFlywheelMaxOutput = 1;
   public static final double kFlywheelMaxRPM = 5700;
@@ -79,7 +79,7 @@ public class Constants {
   static {
     kLimelightConstants.kName = "limelight";
     kLimelightConstants.kTableName = "limelight";
-    kLimelightConstants.kHeight = 37.9; // inches
+    kLimelightConstants.kHeight = 37.8; // inches
     kLimelightConstants.kTurretToLens =
         new Pose2d(new Translation2d(-7.685, 0.0), Rotation2d.fromDegrees(0.0));
     kLimelightConstants.kHorizontalPlaneToLens = Math.toRadians(19);
