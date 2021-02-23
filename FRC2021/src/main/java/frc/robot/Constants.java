@@ -33,11 +33,11 @@ public class Constants {
   // Flywheel
   public static final int kFlywheelLeftId = 8;
   public static final int kFlywheelRightId = 7;
-  public static final double kFlywheelKp = 0.0;
+  public static final double kFlywheelKp = 0.0006;
   public static final double kFlywheelKi = 0.0;
   public static final double kFlywheelKd = 0.0;
   public static final double kFlywheelKIz = 0;
-  public static final double kFlywheelKf = .0;
+  public static final double kFlywheelKf = 0.0002;
   public static final double kFlywheelMinOutput = -1;
   public static final double kFlywheelMaxOutput = 1;
   public static final double kFlywheelMaxRPM = 5700;

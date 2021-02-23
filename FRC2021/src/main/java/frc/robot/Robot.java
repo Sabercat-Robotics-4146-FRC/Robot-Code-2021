@@ -18,30 +18,34 @@ public class Robot extends TimedRobot {
 
   private final SubsystemManager mSubsystemManager = SubsystemManager.getInstance();
 
-  private Drive mDrive;
+  // private Drive mDrive;
 
   private Joystick mController;
 
   public TurretAndFlywheel mTurretAndFlywheel;
   public Pneumatics mPneumatics;
+  public Intake mIntake;
 
   private boolean AButtonFlag = false;
   public boolean BButtonFlag = false;
   public boolean RBButtonFlag = false;
   public boolean XButtonFlag = false;
+  public boolean YButtonFlag = false;
 
   public boolean intakeToggle = false;
   public boolean pneumaticsToggle = false;
   public boolean flywheelToggle = false;
-  public boolean limelightToggle = false;
+  public boolean limelightToggle = true;
+  public boolean shootToggle = false;
 
   @Override
   public void robotInit() {
-    mDrive = Drive.getInstance();
+    // mDrive = Drive.getInstance();
     mTurretAndFlywheel = TurretAndFlywheel.getInstance();
     mPneumatics = Pneumatics.getInstance();
+    mIntake = Intake.getInstance();
 
-    mSubsystemManager.setSubsystems(new Subsystem[] {mDrive, mTurretAndFlywheel, mPneumatics});
+    mSubsystemManager.setSubsystems(new Subsystem[] {mTurretAndFlywheel, mPneumatics, mIntake});
 
     mController = new Joystick(Constants.kDriver1USBPort);
 
@@ -86,15 +90,6 @@ public class Robot extends TimedRobot {
     // mTurretAndFlywheel.flywheel(0, limelightToggle);
     // mTurretAndFlywheel.hood(.6);
 
-    if (mController.getRawButtonPressed(1) && !AButtonFlag) {
-      AButtonFlag = true;
-      intakeToggle = !intakeToggle;
-    }
-
-    if (!mController.getRawButtonPressed(1)) {
-      AButtonFlag = false;
-    }
-
     if (mController.getRawButtonPressed(2) && !BButtonFlag) {
       BButtonFlag = true;
       pneumaticsToggle = !pneumaticsToggle;
@@ -103,5 +98,25 @@ public class Robot extends TimedRobot {
     if (!mController.getRawButtonPressed(2)) {
       BButtonFlag = false;
     }
+
+    if (mController.getRawButtonPressed(4) && !YButtonFlag) {
+      YButtonFlag = true;
+      intakeToggle = !intakeToggle;
+    }
+
+    if (!mController.getRawButtonPressed(4)) {
+      YButtonFlag = false;
+    }
+
+    if (mController.getRawButtonPressed(1) && !AButtonFlag) {
+      AButtonFlag = true;
+      shootToggle = !shootToggle;
+    }
+
+    if (!mController.getRawButtonPressed(1)) {
+      AButtonFlag = false;
+    }
+
+    mIntake.setIndexer(shootToggle, intakeToggle);
   }
 }

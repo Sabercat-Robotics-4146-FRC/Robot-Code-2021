@@ -40,7 +40,7 @@ public class TurretAndFlywheel extends Subsystem {
   private double kMaxOutput = Constants.kFlywheelMaxOutput;
   private double kMinOutput = Constants.kFlywheelMinOutput;
   private double kSpeed = 0.0;
-  private double khood = 0.0;
+  private double khood = 0.45;
 
   private CANSparkMax turret;
   private CANSparkMax flywheelLeft;
@@ -159,12 +159,12 @@ public class TurretAndFlywheel extends Subsystem {
     }
 
     if (rightLimitSwitch.get()
-        & (m_tEncoder.getPosition()
+        && (m_tEncoder.getPosition()
             > 0)) { // If the forward limit switch is pressed, we want to keep the values between -1
       // and 0
       output = Math.min(input, 0);
     } else if (rightLimitSwitch.get()
-        & (m_tEncoder.getPosition()
+        && (m_tEncoder.getPosition()
             <= 0)) { // If the reversed limit switch is pressed, we want to keep the values between
       // 0
       // and 1
@@ -209,15 +209,15 @@ public class TurretAndFlywheel extends Subsystem {
 
   @Override
   public void writePeriodicOutputs() {
-    double p = SmartDashboard.getNumber("kp", 0);
+    double p = SmartDashboard.getNumber("kp", 0.0006);
     double i = SmartDashboard.getNumber("ki", 0);
     double d = SmartDashboard.getNumber("kd", 0);
     double iz = SmartDashboard.getNumber("kiz", 0);
-    double ff = SmartDashboard.getNumber("kff", 0);
+    double ff = SmartDashboard.getNumber("kff", 0.0002);
     double max = SmartDashboard.getNumber("max", 0);
     double min = SmartDashboard.getNumber("min", 0);
     double speed = SmartDashboard.getNumber("Speed", 0);
-    double hood = SmartDashboard.getNumber("hood", 0);
+    double hood = SmartDashboard.getNumber("hood", 0.45);
 
     // if PID coefficients on SmartDashboard have changed, write new values to controller
     if ((p != kP)) {
