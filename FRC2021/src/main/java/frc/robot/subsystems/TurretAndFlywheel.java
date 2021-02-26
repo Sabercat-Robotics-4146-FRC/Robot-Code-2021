@@ -40,7 +40,7 @@ public class TurretAndFlywheel extends Subsystem {
   private double kMaxOutput = Constants.kFlywheelMaxOutput;
   private double kMinOutput = Constants.kFlywheelMinOutput;
   private double kSpeed = 0.0;
-  private double khood = 0.45;
+  private double khood = 0.0;
 
   private CANSparkMax turret;
   private CANSparkMax flywheelLeft;
@@ -64,13 +64,6 @@ public class TurretAndFlywheel extends Subsystem {
     // initialize encoder
     m_encoder = flywheelLeft.getEncoder();
 
-    SmartDashboard.putNumber("kp", kP);
-    SmartDashboard.putNumber("ki", kI);
-    SmartDashboard.putNumber("kd", kD);
-    SmartDashboard.putNumber("kiz", kIz);
-    SmartDashboard.putNumber("kff", kFF);
-    SmartDashboard.putNumber("max", kMaxOutput);
-    SmartDashboard.putNumber("min", kMinOutput);
     SmartDashboard.putNumber("Speed", kSpeed);
     SmartDashboard.putNumber("hood", khood);
 
@@ -151,10 +144,10 @@ public class TurretAndFlywheel extends Subsystem {
         }
         input -= steeringAjustment;
       } else {
-        input = manualInput / 3;
+        input = manualInput / 4;
       }
     } else {
-      input = manualInput / 3;
+      input = manualInput / 4;
       mLLManager.setLeds(Limelight.LedMode.OFF);
     }
 
@@ -209,42 +202,10 @@ public class TurretAndFlywheel extends Subsystem {
 
   @Override
   public void writePeriodicOutputs() {
-    double p = SmartDashboard.getNumber("kp", 0.0006);
-    double i = SmartDashboard.getNumber("ki", 0);
-    double d = SmartDashboard.getNumber("kd", 0);
-    double iz = SmartDashboard.getNumber("kiz", 0);
-    double ff = SmartDashboard.getNumber("kff", 0.0002);
-    double max = SmartDashboard.getNumber("max", 0);
-    double min = SmartDashboard.getNumber("min", 0);
     double speed = SmartDashboard.getNumber("Speed", 0);
-    double hood = SmartDashboard.getNumber("hood", 0.45);
+    double hood = SmartDashboard.getNumber("hood", 0);
 
     // if PID coefficients on SmartDashboard have changed, write new values to controller
-    if ((p != kP)) {
-      m_pidController.setP(p);
-      kP = p;
-    }
-    if ((i != kI)) {
-      m_pidController.setI(i);
-      kI = i;
-    }
-    if ((d != kD)) {
-      m_pidController.setD(d);
-      kD = d;
-    }
-    if ((iz != kIz)) {
-      m_pidController.setIZone(iz);
-      kIz = iz;
-    }
-    if ((ff != kFF)) {
-      m_pidController.setFF(ff);
-      kFF = ff;
-    }
-    if ((max != kMaxOutput) || (min != kMinOutput)) {
-      m_pidController.setOutputRange(min, max);
-      kMinOutput = min;
-      kMaxOutput = max;
-    }
     if (speed != kSpeed) {
       setRPM(speed);
       kSpeed = speed;

@@ -74,6 +74,8 @@ public class Intake extends Subsystem {
       mSparkMaxID13.stopMotor();
       mSparkMaxID12.set(-.3);
       mSparkMaxID11.set(.5);
+    } else {
+      mSparkMaxID11.stopMotor();
     }
   }
 
