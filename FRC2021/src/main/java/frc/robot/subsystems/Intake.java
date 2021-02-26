@@ -45,21 +45,21 @@ public class Intake extends Subsystem {
       mSparkMaxID11.stopMotor();
     } else {
       if (mIRSensor3.get() == true) {
-        mSparkMaxID12.set(-.1);
-        mSparkMaxID13.set(-.1);
-        mSparkMaxID14.set(-.1);
+        mSparkMaxID12.set(-.75);
+        mSparkMaxID13.set(-.75);
+        mSparkMaxID14.set(-.75);
       }
 
       if (mIRSensor3.get() == false && mIRSensor2.get() == true) {
         mSparkMaxID12.set(0);
-        mSparkMaxID13.set(-.1);
-        mSparkMaxID14.set(-.1);
+        mSparkMaxID13.set(-.75);
+        mSparkMaxID14.set(-.75);
       }
 
       if (mIRSensor3.get() == false && mIRSensor2.get() == false && mIRSensor1.get() == true) {
         mSparkMaxID12.set(0);
         mSparkMaxID13.set(0);
-        mSparkMaxID14.set(-.1);
+        mSparkMaxID14.set(-.75);
       }
 
       if (mIRSensor3.get() == false && mIRSensor2.get() == false && mIRSensor1.get() == false) {

@@ -18,8 +18,6 @@ public class Robot extends TimedRobot {
 
   private final SubsystemManager mSubsystemManager = SubsystemManager.getInstance();
 
-  // private Drive mDrive;
-
   private Joystick mController;
 
   public TurretAndFlywheel mTurretAndFlywheel;
@@ -119,6 +117,6 @@ public class Robot extends TimedRobot {
       AButtonFlag = false;
     }
 
-    mIntake.setIndexer(shootToggle, intakeToggle);
+    mIntake.setIndexer(mController.getRawButton(1), intakeToggle);
   }
 }

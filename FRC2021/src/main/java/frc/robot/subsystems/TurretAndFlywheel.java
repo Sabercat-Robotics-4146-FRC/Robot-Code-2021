@@ -144,10 +144,10 @@ public class TurretAndFlywheel extends Subsystem {
         }
         input -= steeringAjustment;
       } else {
-        input = manualInput / 4;
+        input = manualInput;
       }
     } else {
-      input = manualInput / 4;
+      input = manualInput;
       mLLManager.setLeds(Limelight.LedMode.OFF);
     }
 
