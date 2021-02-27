@@ -46,7 +46,7 @@ public class Constants {
   public static final int kTurretId = 9;
   public static final int kTurretRightLimitSwitchId = 0;
 
-  public static final double kTurretKp = .02;
+  public static final double kTurretKp = .04;
   public static final double kTurretMinCommand = .05;
 
   // limelight

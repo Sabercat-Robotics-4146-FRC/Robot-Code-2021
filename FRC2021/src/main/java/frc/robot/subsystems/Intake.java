@@ -37,8 +37,8 @@ public class Intake extends Subsystem {
     mSparkMaxID11 = new CANSparkMax(11, MotorType.kBrushless);
   }
 
-  public synchronized void setIndexer(boolean shootBall, boolean stopIntake) {
-    if (stopIntake == true) {
+  public synchronized void setIndexer(boolean shootBall, boolean startIntake) {
+    if (startIntake == false) {
       mSparkMaxID14.stopMotor();
       mSparkMaxID13.stopMotor();
       mSparkMaxID12.stopMotor();

@@ -39,12 +39,11 @@ public class TurretAndFlywheel extends Subsystem {
   private double kFF = Constants.kFlywheelKf;
   private double kMaxOutput = Constants.kFlywheelMaxOutput;
   private double kMinOutput = Constants.kFlywheelMinOutput;
-  private double kSpeed = 0.0;
   private double khood = 0.0;
 
   private CANSparkMax turret;
-  private CANSparkMax flywheelLeft;
-  private CANSparkMax flywheelRight;
+  private CANSparkMax flywheelSlave;
+  private CANSparkMax flywheelMaster;
   private CANPIDController m_pidController;
   private CANEncoder m_encoder;
   private CANEncoder m_tEncoder;
@@ -53,18 +52,17 @@ public class TurretAndFlywheel extends Subsystem {
   private double tX;
 
   private TurretAndFlywheel() {
-    // flywheelLeft
-    flywheelRight = new CANSparkMax(Constants.kFlywheelRightId, MotorType.kBrushless);
-    flywheelRight.restoreFactoryDefaults();
-    m_pidController = flywheelRight.getPIDController();
+    // flywheelSlave
+    flywheelMaster = new CANSparkMax(Constants.kFlywheelRightId, MotorType.kBrushless);
+    flywheelMaster.restoreFactoryDefaults();
+    m_pidController = flywheelMaster.getPIDController();
 
-    flywheelLeft = new CANSparkMax(Constants.kFlywheelLeftId, MotorType.kBrushless);
-    flywheelLeft.follow(flywheelRight, true);
+    flywheelSlave = new CANSparkMax(Constants.kFlywheelLeftId, MotorType.kBrushless);
+    flywheelSlave.follow(flywheelMaster, true);
 
     // initialize encoder
-    m_encoder = flywheelLeft.getEncoder();
+    m_encoder = flywheelSlave.getEncoder();
 
-    SmartDashboard.putNumber("Speed", kSpeed);
     SmartDashboard.putNumber("hood", khood);
 
     // set gains
@@ -173,21 +171,17 @@ public class TurretAndFlywheel extends Subsystem {
     SmartDashboard.putNumber("output", output);
   }
 
-  // public synchronized void flywheel(double RPM, boolean buttonInput) {
-  //   if (buttonInput) {
-  //     if (mPeriodicIO.SeesTarget && (mPeriodicIO.turretDemand == 0)) {
-  //       if ((RPM) > Constants.kFlywheelMaxRPM) {
-  //         setRPM(Constants.kFlywheelMaxRPM);
-  //       } else {
-  //         setRPM(RPM);
-  //       }
-  //     } else {
-  //       setRPM(0.0);
-  //     }
-  //   } else {
-  //     setRPM(0.0);
-  //   }
-  // }
+  public synchronized void flywheel(double RPM, boolean buttonInput) {
+    if (buttonInput) {
+      if ((RPM) > Constants.kFlywheelMaxRPM) {
+        setRPM(Constants.kFlywheelMaxRPM);
+      } else {
+        setRPM(RPM);
+      }
+    } else {
+      setRPM(0.0);
+    }
+  }
 
   public synchronized void hood(double demand) {
     mPeriodicIO.servoDemand = demand;
@@ -202,19 +196,19 @@ public class TurretAndFlywheel extends Subsystem {
 
   @Override
   public void writePeriodicOutputs() {
-    double speed = SmartDashboard.getNumber("Speed", 0);
     double hood = SmartDashboard.getNumber("hood", 0);
 
     // if PID coefficients on SmartDashboard have changed, write new values to controller
-    if (speed != kSpeed) {
-      setRPM(speed);
-      kSpeed = speed;
-    }
     if (hood != khood) {
       hood(hood);
       khood = hood;
     }
-    m_pidController.setReference(mPeriodicIO.flywheelDemand, ControlType.kVelocity);
+
+    if (mPeriodicIO.flywheelDemand < 1000) {
+      flywheelMaster.stopMotor();
+    } else {
+      m_pidController.setReference(mPeriodicIO.flywheelDemand, ControlType.kVelocity);
+    }
     turret.set(mPeriodicIO.turretDemand);
     servoRight.set(mPeriodicIO.servoDemand);
     servoLeft.set(mPeriodicIO.servoDemand);
@@ -223,7 +217,7 @@ public class TurretAndFlywheel extends Subsystem {
 
   @Override
   public void stop() {
-    flywheelLeft.set(0.0);
+    flywheelSlave.set(0.0);
     turret.set(0.0);
   }
 
@@ -244,8 +238,8 @@ public class TurretAndFlywheel extends Subsystem {
   public void outputTelemetry() {
     mLLManager.outputTelemetry();
     SmartDashboard.putNumber("Flywheel RPM", m_encoder.getVelocity() * 2);
-    SmartDashboard.putNumber("right speed", flywheelRight.get());
-    SmartDashboard.putNumber("left speed", flywheelLeft.get());
+    SmartDashboard.putNumber("right speed", flywheelMaster.get());
+    SmartDashboard.putNumber("left speed", flywheelSlave.get());
     SmartDashboard.putNumber("Flywheel Demand", mPeriodicIO.flywheelDemand);
     SmartDashboard.putNumber("turret pos", m_tEncoder.getPosition());
     SmartDashboard.putNumber("Turret Demand", mPeriodicIO.turretDemand);

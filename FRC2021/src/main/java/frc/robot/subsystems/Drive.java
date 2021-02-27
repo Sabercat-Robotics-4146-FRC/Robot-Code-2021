@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.geometry.Twist2d;
 import frc.lib.util.DriveSignal;
 import frc.lib.util.Util;
@@ -93,5 +94,8 @@ public class Drive extends Subsystem {
   }
 
   @Override
-  public void outputTelemetry() {}
+  public void outputTelemetry() {
+    SmartDashboard.putNumber("right demand", mPeriodicIO.right_demand);
+    SmartDashboard.putNumber("left demand", mPeriodicIO.left_demand);
+  }
 }
