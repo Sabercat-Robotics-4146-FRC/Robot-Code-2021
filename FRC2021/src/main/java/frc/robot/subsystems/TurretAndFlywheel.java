@@ -123,7 +123,8 @@ public class TurretAndFlywheel extends Subsystem {
         });
   }
 
-  public synchronized void turretTurning(double manualInput, Boolean buttonInput) {
+  public synchronized void turretTurning(
+      double manualInput, Boolean buttonInput, Boolean ShootButton) {
     double input = 0;
     double output;
     double steeringAjustment = 0;
@@ -163,9 +164,11 @@ public class TurretAndFlywheel extends Subsystem {
     } else {
       output = input;
     }
-
-    mPeriodicIO.turretDemand = output;
-
+    if (ShootButton) {
+      mPeriodicIO.turretDemand = 0;
+    } else {
+      mPeriodicIO.turretDemand = output;
+    }
     SmartDashboard.putBoolean("limelight toggle", buttonInput);
     SmartDashboard.putNumber("input", input);
     SmartDashboard.putNumber("output", output);
@@ -184,7 +187,9 @@ public class TurretAndFlywheel extends Subsystem {
   }
 
   public synchronized void hood(double demand) {
-    mPeriodicIO.servoDemand = demand;
+    if (mPeriodicIO.SeesTarget) {
+      mPeriodicIO.servoDemand = -2.262e-5 * Math.pow(demand, 2) + 8.764e-3 * demand - 0.4024;
+    }
   }
 
   @Override
@@ -192,17 +197,15 @@ public class TurretAndFlywheel extends Subsystem {
     mLLManager.readPeriodicInputs();
     mPeriodicIO.SeesTarget = mLLManager.SeesTarget();
     mPeriodicIO.distanceToTarget = mLLManager.getDistance();
+    hood(mPeriodicIO.distanceToTarget);
+
+    if (mPeriodicIO.servoDemand >= .75) {
+      mPeriodicIO.servoDemand = .75;
+    }
   }
 
   @Override
   public void writePeriodicOutputs() {
-    double hood = SmartDashboard.getNumber("hood", 0);
-
-    // if PID coefficients on SmartDashboard have changed, write new values to controller
-    if (hood != khood) {
-      hood(hood);
-      khood = hood;
-    }
 
     if (mPeriodicIO.flywheelDemand < 1000) {
       flywheelMaster.stopMotor();

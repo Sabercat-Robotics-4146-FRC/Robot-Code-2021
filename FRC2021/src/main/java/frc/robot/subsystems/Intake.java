@@ -70,8 +70,8 @@ public class Intake extends Subsystem {
     }
 
     if (shootBall == true) {
-      mSparkMaxID14.stopMotor();
-      mSparkMaxID13.stopMotor();
+      mSparkMaxID14.set(-.2);
+      mSparkMaxID13.set(-.25);
       mSparkMaxID12.set(-.3);
       mSparkMaxID11.set(.5);
     } else {

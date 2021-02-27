@@ -23,7 +23,7 @@ public class Constants {
   public static final int kDriveLeftMasterId = 3;
   public static final int kDriveLeftSlaveId = 4;
 
-  public static final double kDriveWheelTrackWidthInches = 25.42;
+  public static final double kDriveWheelTrackWidthInches = 22;
   public static final double kTrackScrubFactor = 1.0469745223;
 
   // Xbox Controllers
