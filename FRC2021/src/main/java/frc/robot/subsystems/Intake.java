@@ -37,45 +37,54 @@ public class Intake extends Subsystem {
     mSparkMaxID11 = new CANSparkMax(11, MotorType.kBrushless);
   }
 
-  public synchronized void setIndexer(boolean shootBall, boolean startIntake) {
-    if (startIntake == false) {
-      mSparkMaxID14.stopMotor();
-      mSparkMaxID13.stopMotor();
-      mSparkMaxID12.stopMotor();
-      mSparkMaxID11.stopMotor();
+  public synchronized void setIndexer(
+      boolean shootBall, boolean startIntake, boolean reverseToggle) {
+    if (reverseToggle == true) {
+      mSparkMaxID14.set(.75);
+      mSparkMaxID13.set(.75);
+      mSparkMaxID12.set(.75);
+      mSparkMaxID11.set(.75);
     } else {
-      if (mIRSensor3.get() == true) {
-        mSparkMaxID12.set(-.75);
-        mSparkMaxID13.set(-.75);
-        mSparkMaxID14.set(-.75);
+      if (startIntake == false) {
+        mSparkMaxID14.stopMotor();
+        mSparkMaxID13.stopMotor();
+        mSparkMaxID12.stopMotor();
+        mSparkMaxID11.stopMotor();
+      } else {
+        if (mIRSensor3.get() == true) {
+          mSparkMaxID12.set(-.75);
+          mSparkMaxID13.set(-.75);
+          mSparkMaxID14.set(-.75);
+          // mSparkMaxID11.set(-.2);
+        }
+
+        if (mIRSensor3.get() == false && mIRSensor2.get() == true) {
+          mSparkMaxID12.set(0);
+          mSparkMaxID13.set(-.75);
+          mSparkMaxID14.set(-.75);
+        }
+
+        if (mIRSensor3.get() == false && mIRSensor2.get() == false && mIRSensor1.get() == true) {
+          mSparkMaxID12.set(0);
+          mSparkMaxID13.set(0);
+          mSparkMaxID14.set(-.75);
+        }
+
+        if (mIRSensor3.get() == false && mIRSensor2.get() == false && mIRSensor1.get() == false) {
+          mSparkMaxID12.set(0);
+          mSparkMaxID13.set(0);
+          mSparkMaxID14.set(0);
+        }
       }
 
-      if (mIRSensor3.get() == false && mIRSensor2.get() == true) {
-        mSparkMaxID12.set(0);
-        mSparkMaxID13.set(-.75);
-        mSparkMaxID14.set(-.75);
+      if (shootBall == true) {
+        mSparkMaxID14.set(-.2);
+        mSparkMaxID13.set(-.35);
+        mSparkMaxID12.set(-.55);
+        mSparkMaxID11.set(.6);
+      } else {
+        mSparkMaxID11.stopMotor();
       }
-
-      if (mIRSensor3.get() == false && mIRSensor2.get() == false && mIRSensor1.get() == true) {
-        mSparkMaxID12.set(0);
-        mSparkMaxID13.set(0);
-        mSparkMaxID14.set(-.75);
-      }
-
-      if (mIRSensor3.get() == false && mIRSensor2.get() == false && mIRSensor1.get() == false) {
-        mSparkMaxID12.set(0);
-        mSparkMaxID13.set(0);
-        mSparkMaxID14.set(0);
-      }
-    }
-
-    if (shootBall == true) {
-      mSparkMaxID14.set(-.2);
-      mSparkMaxID13.set(-.25);
-      mSparkMaxID12.set(-.3);
-      mSparkMaxID11.set(.5);
-    } else {
-      mSparkMaxID11.stopMotor();
     }
   }
 
