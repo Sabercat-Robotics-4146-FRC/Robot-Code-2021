@@ -54,6 +54,11 @@ public class Robot extends TimedRobot {
   }
 
   @Override
+  public void robotPeriodic() {
+    mSubsystemManager.outputToSmartDashboard();
+  }
+
+  @Override
   public void autonomousInit() {
     mDisabledLooper.stop();
     mEnabledLooper.start();
