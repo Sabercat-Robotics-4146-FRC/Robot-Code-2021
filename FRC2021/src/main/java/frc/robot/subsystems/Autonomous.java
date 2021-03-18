@@ -8,8 +8,6 @@ public class Autonomous {
 
     private static Autonomous mInstance;
 
-    Limelight lime;
-
     private String mAutoName;
 
     public double[][] leftVelocities;

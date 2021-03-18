@@ -21,7 +21,7 @@ public class Constants {
     public static final int kDriveLeftLeaderId = 3;
     public static final int kDriveLeftFollowerId = 4;
 
-    public static final double kDriveWheelTrackWidthInches = 25.42;
+    public static final double kDriveWheelTrackWidthInches = 20;
     public static final double kTrackScrubFactor = 1.0469745223;
     public static final double kTalonUpdateTime = 0.1;
 

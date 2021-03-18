@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.geometry.Twist2d;
 import frc.robot.Constants;
 import frc.robot.Kinematics;
@@ -155,6 +156,7 @@ public class Drive extends Subsystem {
     @Override
     public void outputTelemetry() {
         // SmartDashboard.getString("Auto Running: ", mAutoName);
+        SmartDashboard.putNumber("pigey", mPeriodicIO.gyro_heading);
 
     }
 

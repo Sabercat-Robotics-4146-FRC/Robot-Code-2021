@@ -29,11 +29,11 @@ public class Robot extends TimedRobot {
 	private XboxController mDriver1XboxController;
 
 	public Robot() {
-		AutoPaths.calculateAll();
 	}
 
 	@Override
 	public void robotInit() {
+		AutoPaths.calculateAll();
 		mDrive = Drive.getInstance();
 		mSubsystemManager.setSubsystems(mDrive);
 
