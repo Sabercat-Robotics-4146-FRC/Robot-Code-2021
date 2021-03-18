@@ -1,0 +1,28 @@
+apply plugin: "java"
+apply plugin: "com.diffplug.spotless"
+
+spotless {
+    lineEndings = "windows"
+
+    format 'misc', {
+        target '**.*'
+
+        trimTrailingWhitespace()
+        indentWithSpaces()
+        endWithNewline()
+    }
+
+    java {
+        target 'src/main/java/**/*.java'
+
+        removeUnusedImports()
+        // replaceRegex "Star Import", "import.*\\*;\\n", ""
+        replace "Multiple Semicolon", ";;", ";"
+
+        // Use this only for organize imports
+        // Will be replaced with eclipse format file
+        googleJavaFormat()
+    }
+}
+
+compileJava.dependsOn 'spotlessApply'
