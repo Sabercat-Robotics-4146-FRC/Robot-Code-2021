@@ -188,7 +188,7 @@ public class TurretAndFlywheel extends Subsystem {
 
   public synchronized void hood(double demand) {
     if (mPeriodicIO.SeesTarget) {
-      mPeriodicIO.servoDemand = -2.262e-5 * Math.pow(demand, 2) + 8.764e-3 * demand - 0.395;
+      mPeriodicIO.servoDemand = -1.003e-5 * Math.pow(demand, 2) + 5.065e-3 * demand - 0.1833;
     }
   }
 
@@ -206,7 +206,6 @@ public class TurretAndFlywheel extends Subsystem {
 
   @Override
   public void writePeriodicOutputs() {
-
     if (mPeriodicIO.flywheelDemand < 1000) {
       flywheelMaster.stopMotor();
     } else {
