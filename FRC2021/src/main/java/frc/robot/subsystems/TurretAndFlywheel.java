@@ -188,7 +188,7 @@ public class TurretAndFlywheel extends Subsystem {
 
   public synchronized void hood(double demand) {
     if (mPeriodicIO.SeesTarget) {
-      mPeriodicIO.servoDemand = -1.229e-5 * Math.pow(demand, 2) + 6.339e-3 * demand - 0.3168;
+      mPeriodicIO.servoDemand = -1.1585e-5 * Math.pow(demand, 2) + 5.7583e-3 * demand - .2306;
     }
   }
 
